@@ -16,6 +16,10 @@
     "./bin/StickItServer.ts",
 
     "./app/login/StickItAuthServer.ts",
+    "./app/login/model/User.ts",
+    "./app/login/model/Client.ts",
+    "./app/login/model/AccessToken.ts",
+    "./app/login/model/RefreshToken.ts",
 
     "./typings/main.d.ts"
   ]
