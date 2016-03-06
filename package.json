@@ -1,0 +1,17 @@
+{
+  "name": "node-proj",
+  "version": "1.0.0",
+  "description": "Template project for node.js application",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guedjm/node-proj.git"
+  },
+  "author": "Maxime Guedj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guedjm/node-proj/issues"
+  },
+  "homepage": "https://github.com/guedjm/node-proj#readme"
+}
