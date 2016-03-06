@@ -2,8 +2,7 @@
   "name": "node-proj",
   "version": "1.0.0",
   "description": "Template project for node.js application",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/guedjm/node-proj.git"
@@ -13,5 +12,9 @@
   "bugs": {
     "url": "https://github.com/guedjm/node-proj/issues"
   },
-  "homepage": "https://github.com/guedjm/node-proj#readme"
+  "homepage": "https://github.com/guedjm/node-proj#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "require-dir": "^0.3.0"
+  }
 }
