@@ -1,2 +1,3 @@
-# node-proj
-Template project for node.js application
+# StickItWebServer
+Web servers for StickIt project
+
