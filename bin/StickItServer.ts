@@ -3,13 +3,17 @@
 import * as http from "http";
 import * as express from "express";
 import * as mongoose from "mongoose";
+import * as vhost from "vhost";
 import { info, error } from "winston";
+
+import { StickItAuthServer } from "../app/login/StickItAuthServer";
 
 
 export class StickItServer {
 
     private exp: express.Express;
     private server: http.Server;
+    private authApp: StickItAuthServer;
 
     initialize() {
         info('Initializing server');
@@ -45,5 +49,8 @@ export class StickItServer {
         this.exp = express();
 
         //Initialize app
+        this.authApp = new StickItAuthServer();
+        this.authApp.initialize();
+        this.exp.use(vhost("login.stickit.com", this.authApp.routes));
     }
 }
