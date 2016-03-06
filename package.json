@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Template project for node.js application",
   "scripts": {
-    "start": "./build/bin/start."
+    "start": "./build/bin/start.js"
   },
   "repository": {
     "type": "git",
