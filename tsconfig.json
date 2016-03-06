@@ -1,0 +1,17 @@
+
+{
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "outDir": "./build"
+  },
+  "files": [
+    "./bin/start.ts"
+  ]
+}
