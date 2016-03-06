@@ -12,6 +12,8 @@
     "outDir": "./build"
   },
   "files": [
-    "./bin/start.ts"
+    "./bin/start.ts",
+
+    "./typings/main.d.ts"
   ]
 }
