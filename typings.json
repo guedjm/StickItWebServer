@@ -3,6 +3,11 @@
   "dependencies": {},
   "devDependencies": {},
   "ambientDependencies": {
-    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#48c1e3c1d6baefa4f1a126f188c27c4fefd36bff"
+    "bcrypt": "github:DefinitelyTyped/DefinitelyTyped/bcrypt/bcrypt.d.ts#30f566d3c9569cbfa6a97da863bdfa58853ca29a",
+    "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#dd638012d63e069f2c99d06ef4dcc9616a943ee4",
+    "mongoose": "github:DefinitelyTyped/DefinitelyTyped/mongoose/mongoose.d.ts#cebde64b3a1d63d07ee7c7dbc49b631ce220d027",
+    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#48c1e3c1d6baefa4f1a126f188c27c4fefd36bff",
+    "vhost": "file:./typings/main/ambient/vhost/vhost.d.ts",
+    "winston": "github:DefinitelyTyped/DefinitelyTyped/winston/winston.d.ts#f29447a4693f90a2543b56eae0efeb344da08cda"
   }
 }
