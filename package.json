@@ -1,20 +1,20 @@
 {
-  "name": "node-proj",
+  "name": "stick-it-web-server",
   "version": "1.0.0",
-  "description": "Template project for node.js application",
+  "description": "Web servers of Stick It",
   "scripts": {
     "start": "gulp build && node ./build/bin/start.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/guedjm/node-proj.git"
+    "url": "git+https://github.com/guedjm/StickItWebServer.git"
   },
   "author": "Maxime Guedj",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/guedjm/node-proj/issues"
+    "url": "https://github.com/guedjm/StickItWebServer/issues"
   },
-  "homepage": "https://github.com/guedjm/node-proj#readme",
+  "homepage": "https://github.com/guedjm/StickItWebServer#readme",
   "dependencies": {
     "require-dir": "^0.3.0"
   },
