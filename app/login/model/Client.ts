@@ -1,7 +1,23 @@
 'use strict';
 
 import * as mongoose from "mongoose";
-import { Utils } from "../misc/utils";
+import { Utils } from "../misc/Utils";
+
+export interface IClientDocument extends mongoose.Document {
+    id: string,
+    type: number,
+    name: string,
+    secret: string,
+    creationDate: Date,
+    activated: boolean
+}
+
+export interface IClientDocumentModel extends mongoose.Model<IClientDocument> {
+
+    createClient(name: string, type: number, cb: (err: any, client: IClientDocument)=> void): void;
+    findByClientId(id: string, cb: (err: any, client: IClientDocument)=> void): void;
+    findByClientIdAndSecret(id: string, secret: string, cb: (err: any, client: IClientDocument)=> void): void;
+}
 
 const clientSchema = new mongoose.Schema({
     id: mongoose.Schema.Types.String,
@@ -12,9 +28,9 @@ const clientSchema = new mongoose.Schema({
     activated: Boolean
 });
 
-clientSchema.static('createClient', function (name: string, type: number, cb: Function) {
+clientSchema.static('createClient', function (name: string, type: number, cb: (err: any, client: IClientDocument)=> void) {
 
-    ClientModel.create({
+    ClientDocumentModel.create({
         id: Utils.uidGen(25),
         type: type,
         name: name,
@@ -24,12 +40,12 @@ clientSchema.static('createClient', function (name: string, type: number, cb: Fu
     }, cb)
 });
 
-clientSchema.static('findById', function (clientId: string, cb: Function) {
-    ClientModel.findOne({id: clientId}, cb);
+clientSchema.static('findByClientId', function (clientId: string, cb: (err: any, client: IClientDocument)=> void) {
+    ClientDocumentModel.findOne({id: clientId}, cb);
 });
 
-clientSchema.static('findByIdAndSecret', function (clientId: string, secret: string, cb: Function) {
-    ClientModel.findOne({id: clientId, secret: secret}, cb);
+clientSchema.static('findByClientIdAndSecret', function (clientId: string, secret: string, cb: (err: any, client: IClientDocument)=> void) {
+    ClientDocumentModel.findOne({id: clientId, secret: secret}, cb);
 });
 
-export const ClientModel = mongoose.model('client', clientSchema);
+export const ClientDocumentModel: IClientDocumentModel = <IClientDocumentModel>mongoose.model('client', clientSchema);

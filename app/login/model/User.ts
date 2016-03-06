@@ -2,7 +2,7 @@
 
 import * as bcrypt from "bcrypt";
 import * as mongoose from "mongoose";
-import { Utils } from "../misc/utils";
+import { Utils } from "../misc/Utils";
 
 const userSchema = new mongoose.Schema({
     publicId: mongoose.Schema.Types.String,

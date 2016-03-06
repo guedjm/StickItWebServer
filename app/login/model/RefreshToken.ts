@@ -1,6 +1,6 @@
 'use strict';
 
-import { Utils } from "../misc/utils";
+import { Utils } from "../misc/Utils";
 import * as mongoose from "mongoose";
 
 const refreshTokenSchema = new mongoose.Schema({

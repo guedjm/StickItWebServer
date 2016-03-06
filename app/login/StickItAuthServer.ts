@@ -3,6 +3,8 @@
 import * as express from "express";
 import { info } from "winston";
 
+import * as ClientController from "./controller/Client";
+
 export class StickItAuthServer {
 
     private router: express.Router;
@@ -12,7 +14,7 @@ export class StickItAuthServer {
         info('Initializing StickItAuthServer');
         this.router = express.Router();
 
-
+        this.router.post('/client', ClientController.createClient);
     }
 
     get routes(): express.Router {

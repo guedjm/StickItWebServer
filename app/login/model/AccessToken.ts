@@ -1,7 +1,7 @@
 'use strict';
 
 import * as mongoose from "mongoose";
-import { Utils } from "../misc/utils";
+import { Utils } from "../misc/Utils";
 
 const accessTokenSchema = new mongoose.Schema({
     grant: mongoose.Schema.Types.String,
