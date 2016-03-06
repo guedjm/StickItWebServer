@@ -8,7 +8,7 @@ import * as bodyParser from "body-parser";
 import { info, error } from "winston";
 
 import { StickItAuthServer } from "../app/login/StickItAuthServer";
-import { StickItError } from "../app/login/misc/Error";
+import { StickItError } from "../misc/Error";
 
 
 export class StickItServer {

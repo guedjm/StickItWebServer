@@ -14,6 +14,7 @@
   "files": [
     "./bin/start.ts",
     "./bin/StickItServer.ts",
+    "./misc/Error.ts",
 
     "./app/login/StickItAuthServer.ts",
     "./app/login/model/ModelManager.ts",
@@ -22,7 +23,6 @@
     "./app/login/model/AccessToken.ts",
     "./app/login/model/RefreshToken.ts",
     "./app/login/misc/Utils.ts",
-    "./app/login/misc/Error.ts",
     "./app/login/controller/Client.ts",
 
 
