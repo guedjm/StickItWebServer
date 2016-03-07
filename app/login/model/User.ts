@@ -13,7 +13,7 @@ export interface IUserDocument extends mongoose.Document {
 
 export interface IUserDocumentModel extends mongoose.Model<IUserDocument> {
 
-  createUser(email:string, passwprd:string, cb:(err:any, user:IUserDocument)=> void): void;
+  createUser(email:string, password:string, cb:(err:any, user:IUserDocument)=> void): void;
   findUserByEmailAndPassword(email:string, password:string, cb:(err:any, user:IUserDocument)=> void): void;
 }
 
