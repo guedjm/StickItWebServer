@@ -4,6 +4,7 @@ import { IClientDocumentModel, ClientDocumentModel} from "./Client";
 import { IUserDocumentModel, UserDocumentModel} from "./User";
 import { IAccessTokenDocumentModel, AccessTokenModel} from "./AccessToken";
 import { IRefreshTokenDocumentModel, RefreshTokenModel} from "./RefreshToken";
+import { IAuthCodeDocumentModel, AuthCodeModel} from "./AuthCode";
 
 export class ModelManager {
 
@@ -21,5 +22,9 @@ export class ModelManager {
 
   static getRefreshTokenModel():IRefreshTokenDocumentModel {
     return <IRefreshTokenDocumentModel>RefreshTokenModel;
+  }
+
+  static getAuthCodeModel(): IAuthCodeDocumentModel {
+    return <IAuthCodeDocumentModel>AuthCodeModel;
   }
 }
