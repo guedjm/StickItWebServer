@@ -30,3 +30,7 @@ export function createClient(req:express.Request, res:express.Response, next:exp
       });
   }
 }
+
+export function hello(req:express.Request, res:express.Response, next:express.NextFunction) {
+  res.send('Hello');
+}

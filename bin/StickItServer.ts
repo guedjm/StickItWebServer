@@ -5,6 +5,7 @@ import * as express from "express";
 import * as mongoose from "mongoose";
 import * as vhost from "vhost";
 import * as bodyParser from "body-parser";
+import * as passport from "passport";
 import { info, error } from "winston";
 
 import { StickItAuthServer } from "../app/login/StickItAuthServer";
@@ -51,6 +52,7 @@ export class StickItServer {
     this.exp = express();
     this.exp.use(bodyParser.json());
     this.exp.use(bodyParser.urlencoded({extended: false}));
+    this.exp.use(passport.initialize());
 
     //Initialize app
     this.authApp = new StickItAuthServer();

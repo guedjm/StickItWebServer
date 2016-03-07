@@ -24,6 +24,7 @@
     "./app/login/model/RefreshToken.ts",
     "./app/login/misc/Utils.ts",
     "./app/login/controller/Client.ts",
+    "./app/login/auth/BasicAuth.ts",
 
 
 

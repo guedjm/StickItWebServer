@@ -3,6 +3,7 @@
 import * as express from "express";
 import { info } from "winston";
 
+import { isBasicAuth } from "./auth/BasicAuth";
 import * as ClientController from "./controller/Client";
 
 export class StickItAuthServer {
@@ -15,6 +16,7 @@ export class StickItAuthServer {
     this.router = express.Router();
 
     this.router.post('/client', ClientController.createClient);
+    this.router.get('/client', isBasicAuth, ClientController.hello);
   }
 
   get routes():express.Router {
