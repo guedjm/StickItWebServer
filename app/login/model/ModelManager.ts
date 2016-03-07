@@ -7,19 +7,19 @@ import { IRefreshTokenModel, RefreshTokenModel} from "./RefreshToken";
 
 export class ModelManager {
 
-    static getClientModel(): IClientDocumentModel {
-        return <IClientDocumentModel>ClientDocumentModel;
-    }
+  static getClientModel():IClientDocumentModel {
+    return <IClientDocumentModel>ClientDocumentModel;
+  }
 
-    static getUserModel(): IUserDocumentModel {
-        return <IUserDocumentModel>UserDocumentModel;
-    }
+  static getUserModel():IUserDocumentModel {
+    return <IUserDocumentModel>UserDocumentModel;
+  }
 
-    static getAccessTokenModel(): IAccessTokenModel {
-        return <IAccessTokenModel>AccessTokenModel;
-    }
+  static getAccessTokenModel():IAccessTokenModel {
+    return <IAccessTokenModel>AccessTokenModel;
+  }
 
-    static getRefreshTokenModel(): IRefreshTokenModel {
-        return <IRefreshTokenModel>RefreshTokenModel;
-    }
+  static getRefreshTokenModel():IRefreshTokenModel {
+    return <IRefreshTokenModel>RefreshTokenModel;
+  }
 }

@@ -7,17 +7,17 @@ import * as ClientController from "./controller/Client";
 
 export class StickItAuthServer {
 
-    private router: express.Router;
+  private router:express.Router;
 
-    initialize() {
+  initialize() {
 
-        info('Initializing StickItAuthServer');
-        this.router = express.Router();
+    info('Initializing StickItAuthServer');
+    this.router = express.Router();
 
-        this.router.post('/client', ClientController.createClient);
-    }
+    this.router.post('/client', ClientController.createClient);
+  }
 
-    get routes(): express.Router {
-        return this.router;
-    }
+  get routes():express.Router {
+    return this.router;
+  }
 }
