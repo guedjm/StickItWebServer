@@ -18,7 +18,7 @@ export interface IRefreshTokenDocument extends mongoose.Document {
   condemn(cb:(err:any)=> void): void;
 }
 
-export interface IRefreshTokenModel extends mongoose.Model<IRefreshTokenDocument> {
+export interface IRefreshTokenDocumentModel extends mongoose.Model<IRefreshTokenDocument> {
 
   createToken(grant:string, userId:string, clientId:string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
   getToken(token:string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
@@ -58,4 +58,4 @@ refreshTokenSchema.method('condemn', function (cb:(err:any)=> void) {
   this.save(cb);
 });
 
-export const RefreshTokenModel:IRefreshTokenModel = <IRefreshTokenModel>mongoose.model('refreshToken', refreshTokenSchema);
+export const RefreshTokenModel:IRefreshTokenDocumentModel = <IRefreshTokenDocumentModel>mongoose.model('refreshToken', refreshTokenSchema);

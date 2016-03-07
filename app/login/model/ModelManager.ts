@@ -2,8 +2,8 @@
 
 import { IClientDocumentModel, ClientDocumentModel} from "./Client";
 import { IUserDocumentModel, UserDocumentModel} from "./User";
-import { IAccessTokenModel, AccessTokenModel} from "./AccessToken";
-import { IRefreshTokenModel, RefreshTokenModel} from "./RefreshToken";
+import { IAccessTokenDocumentModel, AccessTokenModel} from "./AccessToken";
+import { IRefreshTokenDocumentModel, RefreshTokenModel} from "./RefreshToken";
 
 export class ModelManager {
 
@@ -15,11 +15,11 @@ export class ModelManager {
     return <IUserDocumentModel>UserDocumentModel;
   }
 
-  static getAccessTokenModel():IAccessTokenModel {
-    return <IAccessTokenModel>AccessTokenModel;
+  static getAccessTokenModel():IAccessTokenDocumentModel {
+    return <IAccessTokenDocumentModel>AccessTokenModel;
   }
 
-  static getRefreshTokenModel():IRefreshTokenModel {
-    return <IRefreshTokenModel>RefreshTokenModel;
+  static getRefreshTokenModel():IRefreshTokenDocumentModel {
+    return <IRefreshTokenDocumentModel>RefreshTokenModel;
   }
 }

@@ -17,7 +17,7 @@ export interface IAccessTokenDocument extends mongoose.Document {
   condemn(cb:(err:any)=> void): void;
 }
 
-export interface IAccessTokenModel extends mongoose.Model<IAccessTokenDocument> {
+export interface IAccessTokenDocumentModel extends mongoose.Model<IAccessTokenDocument> {
 
   createToken(grant:string, userId:string, clientId:string, cb:(err:any, token:IAccessTokenDocument)=> void): void;
   getToken(token:string, cb:(err:any, token:IAccessTokenDocument)=> void): void;
@@ -60,4 +60,4 @@ accessTokenSchema.method('condemn', function (cb:(err:any)=> void) {
 });
 
 
-export const AccessTokenModel:IAccessTokenModel = <IAccessTokenModel>mongoose.model('accessToken', accessTokenSchema);
+export const AccessTokenModel:IAccessTokenDocumentModel = <IAccessTokenDocumentModel>mongoose.model('accessToken', accessTokenSchema);

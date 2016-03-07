@@ -6,7 +6,7 @@ import { IClientDocument, IClientDocumentModel } from "../model/Client";
 
 
 const BasicStrategy = require("passport-http").BasicStrategy;
-const ClientPasswordStrategy = require("passport-oauth2-client-password").ClientPasswordStrategy;
+const ClientPasswordStrategy = require("passport-oauth2-client-password").Strategy;
 
 passport.use('client-basic', new BasicStrategy((key: string, secret: string, done: Function): void => {
 

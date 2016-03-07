@@ -9,12 +9,14 @@ export interface IUserDocument extends mongoose.Document {
   email: string,
   password: string,
   registrationDate: Date
+
+  verifyPassword(password:string, cb: (err: any, result: boolean)=> void): void;
 }
 
 export interface IUserDocumentModel extends mongoose.Model<IUserDocument> {
 
   createUser(email:string, password:string, cb:(err:any, user:IUserDocument)=> void): void;
-  findUserByEmailAndPassword(email:string, password:string, cb:(err:any, user:IUserDocument)=> void): void;
+  findUserByEmail(email:string, cb:(err:any, user:IUserDocument)=> void): void;
 }
 
 const userSchema = new mongoose.Schema({
@@ -37,10 +39,12 @@ userSchema.static('createUser', function (email:string, password:string,
   }, cb);
 });
 
-userSchema.static('findUserByEmailAndPassword', function (email:string, password:string, cb:Function) {
-
-  UserDocumentModel.findOne({email: email, password: password}, cb);
+userSchema.static('findUserByEmail', function (email:string, cb:(err:any, user:IUserDocument)=> void) {
+  UserDocumentModel.findOne({email: email}, cb);
 });
 
+userSchema.method('verifyPassword', function (password: string,  cb: (err: any, result: boolean)=> void): void {
+  bcrypt.compare(password, this.password, cb);
+});
 
 export const UserDocumentModel:IUserDocumentModel = <IUserDocumentModel>mongoose.model('user', userSchema);
