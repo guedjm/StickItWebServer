@@ -2,6 +2,26 @@
 
 import * as mongoose from "mongoose";
 import { Utils } from "../misc/Utils";
+import {IUserDocument} from "./User";
+import {IClientDocument} from "./Client";
+
+export interface IAccessTokenDocument extends mongoose.Document {
+    grant: string,
+    user: string | IUserDocument;
+    client: string | IClientDocument;
+    token: string;
+    usable: boolean;
+    deliveryDate: Date;
+    expirationDate: Date;
+
+    condemn(cb: (err: any)=> void): void;
+}
+
+export interface IAccessTokenModel extends mongoose.Model<IAccessTokenDocument> {
+
+    createToken(grant: string, userId: string, clientId: string, cb: (err: any, token: IAccessTokenDocument)=> void): void;
+    getToken(token: string, cb: (err: any, token: IAccessTokenDocument)=> void): void;
+}
 
 const accessTokenSchema = new mongoose.Schema({
     grant: mongoose.Schema.Types.String,
@@ -13,11 +33,12 @@ const accessTokenSchema = new mongoose.Schema({
     expirationDate: Date
 });
 
-accessTokenSchema.static('createToken', function (grant: string, userId: string, clientId: string, cb: Function) {
+accessTokenSchema.static('createToken', function (grant: string, userId: string, clientId: string,
+                                                  cb: (err: any, token: IAccessTokenDocument)=> void) {
     const now = new Date();
     const expirationDate = now.getTime() +  60 * 60000; // 60 minutes
 
-    accessTokenModel.create({
+    AccessTokenModel.create({
         grant: grant,
         user: userId,
         client: clientId,
@@ -28,14 +49,15 @@ accessTokenSchema.static('createToken', function (grant: string, userId: string,
     }, cb);
 });
 
-accessTokenSchema.static('getToken', function (token: string, cb: Function) {
-    accessTokenModel.findOne({token: token, usable: true, expirationDate : {$gt: new Date()}}, cb);
+accessTokenSchema.static('getToken', function (token: string,
+                                               cb: (err: any, token: IAccessTokenDocument)=> void) {
+    AccessTokenModel.findOne({token: token, usable: true, expirationDate : {$gt: new Date()}}, cb);
 });
 
-accessTokenSchema.method('condemn', function (cb: Function) {
+accessTokenSchema.method('condemn', function (cb: (err: any)=> void) {
     this.usable = false;
     this.save(cb);
 });
 
 
-export const accessTokenModel = mongoose.model('accessToken', accessTokenSchema);
+export const AccessTokenModel: IAccessTokenModel = <IAccessTokenModel>mongoose.model('accessToken', accessTokenSchema);
