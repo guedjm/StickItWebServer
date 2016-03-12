@@ -7,7 +7,7 @@ import { isLogged } from "../controller/OAuth2";
 export function loginForm(req: express.Request, res: express.Response, next: express.NextFunction): void {
 
   if (isLogged(req)) {
-    res.redirect('/authorize');
+    res.redirect('/authorize?' + queryStr.stringify(req.query));
   }
   else {
     res.render('login.jade');

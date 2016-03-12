@@ -24,13 +24,14 @@ export class StickItAuthServer {
 
     this.router.post('/user', isBasicAuth, UserController.createUser);
 
-    this.router.post('/token', isBasicAuth, ...OAuth2Controller.tokenEndPoint);
-
     this.router.get('/login', LoginController.loginForm);
     this.router.post('/login', validateLogin, LoginController.onUserLogin);
 
-    this.router.get('/authorize', OAuth2Controller.userLogged, OAuth2Controller.authorizationEndPoint, LoginController.authorizeForm, OAuth2Controller.sserver.errorHandler);
+    this.router.get('/authorize', OAuth2Controller.userLogged, ...OAuth2Controller.authorizationEndPoint,
+      LoginController.authorizeForm, OAuth2Controller.sserver.errorHandler);
     this.router.post('/authorize', OAuth2Controller.userLogged, ...OAuth2Controller.decisionEndPoint);
+
+    this.router.post('/token', isBasicAuth, ...OAuth2Controller.tokenEndPoint);
   }
 
   get routes():express.Router {

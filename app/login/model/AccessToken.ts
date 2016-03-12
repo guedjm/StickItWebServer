@@ -21,6 +21,7 @@ export interface IAccessTokenDocumentModel extends mongoose.Model<IAccessTokenDo
 
   createToken(grant:string, userId:string| IUserDocument, clientId:string | IClientDocument, cb:(err:any, token:IAccessTokenDocument)=> void): void;
   getToken(token:string, cb:(err:any, token:IAccessTokenDocument)=> void): void;
+  disableOldToken(clientId: string, userId: string | IUserDocument, cb: (err: any)=> void): void;
 }
 
 const accessTokenSchema = new mongoose.Schema({
@@ -52,6 +53,14 @@ accessTokenSchema.static('createToken', function (grant:string, userId:string | 
 accessTokenSchema.static('getToken', function (token:string,
                                                cb:(err:any, token:IAccessTokenDocument)=> void) {
   AccessTokenModel.findOne({token: token, usable: true, expirationDate: {$gt: new Date()}}, cb);
+});
+
+accessTokenSchema.static('disableOldToken', function (clientId: string, userId: string, cb: (err: any)=> void): void {
+
+  AccessTokenModel.update({client: clientId, user: userId, usable: true}, {usable: false}, {multi: true},
+    function (err: any) {
+      cb(err);
+    });
 });
 
 accessTokenSchema.method('condemn', function (cb:(err:any)=> void) {

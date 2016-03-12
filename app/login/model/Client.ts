@@ -4,12 +4,13 @@ import * as mongoose from "mongoose";
 import { Utils } from "../misc/Utils";
 
 export interface IClientDocument extends mongoose.Document {
-  id: string,
-  type: number,
-  name: string,
-  secret: string,
-  creationDate: Date,
-  activated: boolean
+  id: string;
+  type: number;
+  name: string;
+  secret: string;
+  redirectURI: [string];
+  creationDate: Date;
+  activated: boolean;
 }
 
 export interface IClientDocumentModel extends mongoose.Model<IClientDocument> {
@@ -24,6 +25,7 @@ const clientSchema = new mongoose.Schema({
   type: Number,
   name: mongoose.Schema.Types.String,
   secret: mongoose.Schema.Types.String,
+  redirectURI: [mongoose.Schema.Types.String],
   creationDate: Date,
   activated: Boolean
 });

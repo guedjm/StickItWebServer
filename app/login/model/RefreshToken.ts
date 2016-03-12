@@ -20,8 +20,9 @@ export interface IRefreshTokenDocument extends mongoose.Document {
 
 export interface IRefreshTokenDocumentModel extends mongoose.Model<IRefreshTokenDocument> {
 
-  createToken(grant:string, userId:string, clientId:string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
+  createToken(grant:string, userId:string | IUserDocument, clientId:string | IClientDocument, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
   getToken(token:string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
+  disableOldToken(clientId: string, userId: string | IUserDocument, cb: (err: any)=> void): void;
 }
 
 const refreshTokenSchema = new mongoose.Schema({
@@ -36,7 +37,7 @@ const refreshTokenSchema = new mongoose.Schema({
 
 refreshTokenSchema.static('createToken', function (grant:string, userId:string, clientId:string, cb:(err:any, token:IRefreshTokenDocument)=> void) {
   const now = new Date();
-  const expirationDate = now.getTime() + 72 * 60000;
+  const expirationDate = now.getTime() + 60 * 72 * 60000;
 
   RefreshTokenModel.create({
     grant: grant,
@@ -52,6 +53,15 @@ refreshTokenSchema.static('createToken', function (grant:string, userId:string, 
 refreshTokenSchema.static('getToken', function (token:string, cb:(err:any, token:IRefreshTokenDocument)=> void) {
   RefreshTokenModel.findOne({token: token}, cb)
 });
+
+refreshTokenSchema.static('disableOldToken', function (clientId: string, userId: string, cb: (err: any)=> void): void {
+
+  RefreshTokenModel.update({client: clientId, user: userId, usable: true}, {usable: false}, {multi: true},
+    function (err: any) {
+      cb(err);
+    });
+});
+
 
 refreshTokenSchema.method('condemn', function (cb:(err:any)=> void) {
   this.usable = false;

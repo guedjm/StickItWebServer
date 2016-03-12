@@ -1,4 +1,3 @@
-import {unuse} from "passport";
 'use strict';
 
 const oauth2orize = require('oauth2orize');
@@ -13,6 +12,8 @@ import {IRefreshTokenDocument, IRefreshTokenDocumentModel} from "../model/Refres
 import {Request, Response, NextFunction, RequestHandler} from "express";
 import {IAuthCodeDocumentModel} from "../model/AuthCode";
 import {IAuthCodeDocument} from "../model/AuthCode";
+import {IUserDecisionDocumentModel} from "../model/UserDecision";
+import {IUserDecisionDocument} from "../model/UserDecision";
 
 server.serializeClient(function(client: IClientDocument, cb: (err: any, clientId: string)=> void): void {
   return cb(null, client.id);
@@ -91,7 +92,7 @@ server.grant(oauth2orize.grant.code(function(client: IClientDocument,
 }));
 
 server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, code: string, redirectURI: string,
-                                                    done: (err: any, token?: string | boolean)=> void ): void {
+                                                    done: (err: any, token?: string | boolean, rToken?: string, option?: Object)=> void ): void {
 
   const codeModel: IAuthCodeDocumentModel = ModelManager.getAuthCodeModel();
   codeModel.getCode(code, client._id, function (err: any, authCode: IAuthCodeDocument) {
@@ -108,44 +109,97 @@ server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, cod
         }
         else {
           const accessTokenModel: IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
-          accessTokenModel.createToken('authorization_code', authCode.user, authCode.client,
-            function (err:any, token: IAccessTokenDocument): void {
-              if (err) {
-                done(err);
-              }
-              else if (token == undefined) {
-                done(null, false);
-              }
-              else {
-                done(null, token.token);
-              }
-            });
+          const refreshTokenModel: IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
+
+          accessTokenModel.disableOldToken(client._id, authCode.user, function (err: any):void {
+            if (err) {
+              done(err);
+            }
+            else {
+              refreshTokenModel.disableOldToken(client._id, authCode.user, function (err: any): void {
+                if (err) {
+                  done(err);
+                }
+                else {
+                  accessTokenModel.createToken('authorization_code', authCode.user, authCode.client,
+                    function (err:any, aToken: IAccessTokenDocument): void {
+                      if (err) {
+                        done(err);
+                      }
+                      else if (aToken == undefined) {
+                        done(null, false);
+                      }
+                      else {
+
+                        refreshTokenModel.createToken('authorization_code', authCode.user, authCode.client,
+                        function (err: any, rToken: IRefreshTokenDocument): void {
+                          done(null, aToken.token, rToken.token, {expire_in: 3600});
+                        });
+                      }
+                    });
+                }
+              });
+            }
+          });
         }
       });
     }
   });
 }));
 
+function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
 
+  const userDecision: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
 
-export const authorizationEndPoint: RequestHandler = server.authorization(function (clientId: string, redirectUri: string,
-                                                                                      done: (err: any, client?: IClientDocument | boolean, redirectURI?: string | boolean)=> void): void {
-  const clientModel: IClientDocumentModel = ModelManager.getClientModel();
-  clientModel.findByClientId(clientId, function (err: any, client: IClientDocument): void {
+  userDecision.disableOldDecision(req.user._id, req.oauth2.client._id, function (err: any) {
     if (err) {
-      done(err)
-    }
-    else if (client == undefined) {
-      done(null, false, false);
+      done(err);
     }
     else {
-      done(null, client, redirectUri);
+      userDecision.createUserDecision(req.user._id, req.oauth2.client._id, req.body.allow != undefined,
+        function (err:any, decision: IUserDecisionDocument): void {
+          if (err) {
+            done(err);
+          }
+          else {
+            done(null, {allow: req.body.allow != undefined});
+          }
+        });
     }
   });
-});
+}
+
+export const authorizationEndPoint: RequestHandler[] = [
+  server.authorization(function (clientId: string, redirectUri: string,
+                                 done: (err: any, client?: IClientDocument | boolean, redirectURI?: string | boolean)=> void): void {
+
+    const clientModel:IClientDocumentModel = ModelManager.getClientModel();
+    clientModel.findByClientId(clientId, function (err:any, client:IClientDocument):void {
+      if (err) {
+        done(err)
+      }
+      else if (client == undefined || client.redirectURI.indexOf(redirectUri) == -1) {
+        done(null, false, false);
+      }
+      else {
+        done(null, client, redirectUri);
+      }
+    });
+  }, function (clientId: string, userId: string, done: (arr:any, result: boolean)=> void): void {
+
+    const userDecisionModel: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
+    userDecisionModel.findUserDecision(userId, clientId, function (err: any, decision: IUserDecisionDocument): void {
+      if (err) {
+        done(err, false);
+      }
+      else {
+        done(null, (decision != undefined) ? decision.allow : false);
+      }
+    });
+  }), server.errorHandler()];
 
 export const sserver = server;
-export const decisionEndPoint: RequestHandler[] = [server.decision(), server.errorHandler()];
+export const decisionEndPoint: RequestHandler[] = [server.decision({}, saveUserDecision), server.errorHandler()];
 export const tokenEndPoint:RequestHandler[] = [server.token(), server.errorHandler()];
 
 export function isLogged(req: Request): boolean {

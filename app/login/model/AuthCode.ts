@@ -54,7 +54,7 @@ authCodeSchema.static('createCode', function (userId: string, clientId: string, 
 
 authCodeSchema.static('getCode', function (code: string, clientId: string,
                                            cb: (err: any, code: IAuthCodeDocument)=> void) : void {
-  AuthCodeModel.findOne({code: code, client: clientId, usable: true}, cb);
+  AuthCodeModel.findOne({code: code, client: clientId, usable: true, expirationDate: {$gt: new Date()}}, cb);
 });
 
 authCodeSchema.method('condemn', function (cb: (err: any)=> void): void {
