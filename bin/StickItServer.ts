@@ -6,6 +6,7 @@ import * as mongoose from "mongoose";
 import * as vhost from "vhost";
 import * as bodyParser from "body-parser";
 import * as passport from "passport";
+import * as session from "express-session";
 import { info, error } from "winston";
 
 import { StickItAuthServer } from "../app/login/StickItAuthServer";
@@ -50,9 +51,20 @@ export class StickItServer {
     info('Initializing express');
 
     this.exp = express();
+
+    this.exp.set('views', './app/login/view');
+    this.exp.set('view engine', 'jade');
+
+    this.exp.use(express.static('./app/login/public'));
+    this.exp.use(session({
+      secret: "fzeoijfiozejfioejzio",
+      resave: true,
+      saveUninitialized: false
+    }));
     this.exp.use(bodyParser.json());
     this.exp.use(bodyParser.urlencoded({extended: false}));
     this.exp.use(passport.initialize());
+    this.exp.use(passport.session());
 
     //Initialize app
     this.authApp = new StickItAuthServer();
@@ -62,6 +74,7 @@ export class StickItServer {
     this.exp.use(function (err:any, req:express.Request, res:express.Response, next:express.NextFunction) {
 
       if (!(err instanceof StickItError))
+        console.error(err.stack);
         err = StickItError.internalServerError();
 
       const serr:StickItError = err;

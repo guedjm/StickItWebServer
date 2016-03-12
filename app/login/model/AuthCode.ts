@@ -13,8 +13,10 @@ export interface IAuthCodeDocument extends mongoose.Document {
   usable: boolean;
   deliveryDate: Date;
   expirationDate: Date;
+  useDate: Date;
 
   condemn(cb: (err: any)=> void): void;
+  useCode(cb: (err: any)=> void): void;
 }
 
 export interface IAuthCodeDocumentModel extends mongoose.Model<IAuthCodeDocument> {
@@ -30,7 +32,8 @@ const authCodeSchema = new mongoose.Schema({
   redirectUri: mongoose.Schema.Types.String,
   usable: Boolean,
   deliveryDate: Date,
-  expirationDate: Date
+  expirationDate: Date,
+  useDate: Date
 });
 
 authCodeSchema.static('createCode', function (userId: string, clientId: string, redirectUri: string,
@@ -51,7 +54,7 @@ authCodeSchema.static('createCode', function (userId: string, clientId: string, 
 
 authCodeSchema.static('getCode', function (code: string, clientId: string,
                                            cb: (err: any, code: IAuthCodeDocument)=> void) : void {
-  AuthCodeModel.findOne({code: code, client: clientId, usable: true, expirationDate: {$gt: new Date()}}, cb);
+  AuthCodeModel.findOne({code: code, client: clientId, usable: true}, cb);
 });
 
 authCodeSchema.method('condemn', function (cb: (err: any)=> void): void {
@@ -60,5 +63,11 @@ authCodeSchema.method('condemn', function (cb: (err: any)=> void): void {
   this.save(cb);
 });
 
+authCodeSchema.method('useCode', function (cb: (err: any)=> void): void {
+  this.usable = true;
+  this.useDate = new Date();
+
+  this.save(cb);
+});
 
 export const AuthCodeModel: IAuthCodeDocumentModel = <IAuthCodeDocumentModel>mongoose.model('authCode', authCodeSchema);

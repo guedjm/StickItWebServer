@@ -19,7 +19,7 @@ export interface IAccessTokenDocument extends mongoose.Document {
 
 export interface IAccessTokenDocumentModel extends mongoose.Model<IAccessTokenDocument> {
 
-  createToken(grant:string, userId:string, clientId:string, cb:(err:any, token:IAccessTokenDocument)=> void): void;
+  createToken(grant:string, userId:string| IUserDocument, clientId:string | IClientDocument, cb:(err:any, token:IAccessTokenDocument)=> void): void;
   getToken(token:string, cb:(err:any, token:IAccessTokenDocument)=> void): void;
 }
 
@@ -33,7 +33,7 @@ const accessTokenSchema = new mongoose.Schema({
   expirationDate: Date
 });
 
-accessTokenSchema.static('createToken', function (grant:string, userId:string, clientId:string,
+accessTokenSchema.static('createToken', function (grant:string, userId:string | IUserDocument, clientId:string | IClientDocument,
                                                   cb:(err:any, token:IAccessTokenDocument)=> void) {
   const now = new Date();
   const expirationDate = now.getTime() + 60 * 60000; // 60 minutes
