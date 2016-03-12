@@ -64,7 +64,7 @@ authCodeSchema.method('condemn', function (cb: (err: any)=> void): void {
 });
 
 authCodeSchema.method('useCode', function (cb: (err: any)=> void): void {
-  this.usable = true;
+  this.usable = false;
   this.useDate = new Date();
 
   this.save(cb);
