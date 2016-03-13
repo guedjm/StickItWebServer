@@ -4,4 +4,4 @@ import { StickItServer } from "./StickItServer";
 
 const server:StickItServer = new StickItServer();
 server.initialize();
-server.start(3000);
+server.start();

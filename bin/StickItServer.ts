@@ -7,8 +7,8 @@ import * as vhost from "vhost";
 import * as bodyParser from "body-parser";
 import * as passport from "passport";
 import * as session from "express-session";
+import * as config from "config";
 import { info, error } from "winston";
-
 import { StickItAuthServer } from "../app/login/StickItAuthServer";
 import { StickItError } from "../misc/Error";
 
@@ -26,10 +26,10 @@ export class StickItServer {
     this.server = http.createServer(this.exp);
   }
 
-  start(port:number) {
+  start() {
 
-    this.server.listen(port);
-    info('Server listening on port ' + port);
+    this.server.listen(config.get("server.port"));
+    info(`Server listening on port ${config.get("server.port")}`);
   }
 
 
@@ -41,10 +41,10 @@ export class StickItServer {
     });
 
     mongoose.connection.on('error', function () {
-      error('Unable to conenct to the database');
+      error('Unable to connect to the database');
     });
 
-    mongoose.connect('mongodb://localhost:27017/stockit');
+    mongoose.connect(`mongodb://${ config.get("dbConfig.host") }:${ config.get("dbConfig.port") }/${ config.get("dbConfig.dbName") }`);
   }
 
   private _initializeExpress() {
@@ -57,7 +57,7 @@ export class StickItServer {
 
     this.exp.use(express.static('./app/login/public'));
     this.exp.use(session({
-      secret: "fzeoijfiozejfioejzio",
+      secret: config.get<string>("server.sessionSecret"),
       resave: true,
       saveUninitialized: false
     }));
@@ -69,7 +69,7 @@ export class StickItServer {
     //Initialize app
     this.authApp = new StickItAuthServer();
     this.authApp.initialize();
-    this.exp.use(vhost("login.stickit.local", this.authApp.routes));
+    this.exp.use(vhost(config.get<string>("authServer.url"), this.authApp.routes));
 
     this.exp.use(function (err:any, req:express.Request, res:express.Response, next:express.NextFunction) {
 

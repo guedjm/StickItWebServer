@@ -1,6 +1,7 @@
 'use strict';
 
 import * as mongoose from "mongoose";
+import * as config from "config";
 import { Utils } from "../misc/Utils";
 import {IUserDocument} from "./User";
 import {IClientDocument} from "./Client";
@@ -37,7 +38,7 @@ const accessTokenSchema = new mongoose.Schema({
 accessTokenSchema.static('createToken', function (grant:string, userId:string | IUserDocument, clientId:string | IClientDocument,
                                                   cb:(err:any, token:IAccessTokenDocument)=> void) {
   const now = new Date();
-  const expirationDate = now.getTime() + 60 * 60000; // 60 minutes
+  const expirationDate = now.getTime() + 60 * config.get<number>("authServer.refreshTokenDuration");
 
   AccessTokenModel.create({
     grant: grant,

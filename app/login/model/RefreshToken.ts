@@ -1,9 +1,10 @@
-import {IUserDocument} from "./User";
 'use strict';
 
 import { Utils } from "../misc/Utils";
 import * as mongoose from "mongoose";
+import * as config from "config";
 import {IClientDocument} from "./Client";
+import {IUserDocument} from "./User";
 
 
 export interface IRefreshTokenDocument extends mongoose.Document {
@@ -37,7 +38,7 @@ const refreshTokenSchema = new mongoose.Schema({
 
 refreshTokenSchema.static('createToken', function (grant:string, userId:string, clientId:string, cb:(err:any, token:IRefreshTokenDocument)=> void) {
   const now = new Date();
-  const expirationDate = now.getTime() + 60 * 72 * 60000;
+  const expirationDate = now.getTime() + 60 * 60000 * config.get<number>("authServer.accessTokenDuration");
 
   RefreshTokenModel.create({
     grant: grant,
