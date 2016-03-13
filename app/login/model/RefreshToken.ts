@@ -21,7 +21,7 @@ export interface IRefreshTokenDocument extends mongoose.Document {
 export interface IRefreshTokenDocumentModel extends mongoose.Model<IRefreshTokenDocument> {
 
   createToken(grant:string, userId:string | IUserDocument, clientId:string | IClientDocument, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
-  getToken(token:string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
+  getToken(token:string, clientId: string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
   disableOldToken(clientId: string, userId: string | IUserDocument, cb: (err: any)=> void): void;
 }
 
@@ -50,8 +50,8 @@ refreshTokenSchema.static('createToken', function (grant:string, userId:string, 
   }, cb);
 });
 
-refreshTokenSchema.static('getToken', function (token:string, cb:(err:any, token:IRefreshTokenDocument)=> void) {
-  RefreshTokenModel.findOne({token: token}, cb)
+refreshTokenSchema.static('getToken', function (token:string, clientId: string, cb:(err:any, token:IRefreshTokenDocument)=> void) {
+  RefreshTokenModel.findOne({token: token, client: clientId, usable: true}, cb)
 });
 
 refreshTokenSchema.static('disableOldToken', function (clientId: string, userId: string, cb: (err: any)=> void): void {

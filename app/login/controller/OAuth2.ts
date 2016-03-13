@@ -147,6 +147,60 @@ server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, cod
   });
 }));
 
+
+//Refresh token grant
+server.exchange(oauth2orize.exchange.refreshToken(function (client: IClientDocument, refreshToken: string, scope: string,
+                                                            done: (err: any, aToken?: string, rToken?: string, params?: Object)=> void): void {
+
+  const refreshTokenModel: IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
+  refreshTokenModel.getToken(refreshToken, client._id, function (err: any, rToken: IRefreshTokenDocument): void {
+    if (err) {
+      done(err);
+    }
+    else if (rToken == undefined) {
+      done(null);
+    }
+    else {
+      const accessTokenModel: IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
+      accessTokenModel.disableOldToken(client._id, rToken.user, function (err: any): void {
+        if (err) {
+          done(err);
+        }
+        else {
+
+          refreshTokenModel.disableOldToken(client._id, rToken.user, function (err: any): void {
+            if (err) {
+              done(err);
+            }
+            else {
+
+              //Generate token
+              accessTokenModel.createToken('refresh_token', rToken.user, client._id,
+                function (err: any, aToken: IAccessTokenDocument): void {
+                if (err) {
+                  done(err);
+                }
+                else {
+
+                  refreshTokenModel.createToken('refresh_token', rToken.user, client._id,
+                    function (err: any, newRToken: IRefreshTokenDocument): void {
+                      if (err) {
+                        done(err);
+                      }
+                      else {
+                        done(null, aToken.token, newRToken.token, {expire_in: 3600});
+                      }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+}));
+
 function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
 
   const userDecision: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
