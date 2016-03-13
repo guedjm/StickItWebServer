@@ -12,6 +12,7 @@ export interface IRefreshTokenDocument extends mongoose.Document {
   user: string | IUserDocument;
   client: string | IClientDocument;
   token: string;
+  scope: [string];
   usable: boolean;
   deliveryDate: Date;
   expirationDate: Date;
@@ -21,7 +22,8 @@ export interface IRefreshTokenDocument extends mongoose.Document {
 
 export interface IRefreshTokenDocumentModel extends mongoose.Model<IRefreshTokenDocument> {
 
-  createToken(grant:string, userId:string | IUserDocument, clientId:string | IClientDocument, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
+  createToken(grant:string, userId:string | IUserDocument, clientId:string | IClientDocument, scope: [string],
+              cb:(err:any, token:IRefreshTokenDocument)=> void): void;
   getToken(token:string, clientId: string, cb:(err:any, token:IRefreshTokenDocument)=> void): void;
   disableOldToken(clientId: string, userId: string | IUserDocument, cb: (err: any)=> void): void;
 }
@@ -31,12 +33,14 @@ const refreshTokenSchema = new mongoose.Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
   client: {type: mongoose.Schema.Types.ObjectId, ref: 'client'},
   token: mongoose.Schema.Types.String,
+  scope: [mongoose.Schema.Types.String],
   usable: Boolean,
   deliveryDate: Date,
   expirationDate: Date
 });
 
-refreshTokenSchema.static('createToken', function (grant:string, userId:string, clientId:string, cb:(err:any, token:IRefreshTokenDocument)=> void) {
+refreshTokenSchema.static('createToken', function (grant: string, userId: string, clientId: string, scope: [string],
+                                                   cb:(err:any, token:IRefreshTokenDocument)=> void) {
   const now = new Date();
   const expirationDate = now.getTime() + 60 * 60000 * config.get<number>("authServer.accessTokenDuration");
 
@@ -45,6 +49,7 @@ refreshTokenSchema.static('createToken', function (grant:string, userId:string, 
     user: userId,
     client: clientId,
     token: Utils.uidGen(20),
+    scope: scope,
     usable: true,
     deliveryDate: now,
     expirationDate: expirationDate

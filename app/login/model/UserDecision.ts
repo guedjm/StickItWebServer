@@ -9,6 +9,7 @@ export interface IUserDecisionDocument extends mongoose.Document {
   user: IUserDocument | string;
   client: IClientDocument | string;
   allow: boolean;
+  scope: [string];
   date: Date;
   expirationDate: Date;
   usable: boolean;
@@ -16,12 +17,12 @@ export interface IUserDecisionDocument extends mongoose.Document {
 
 export interface IUserDecisionDocumentModel extends mongoose.Model<IUserDecisionDocument> {
 
-  createUserDecision(userId: string, clientId: string, allow: boolean,
+  createUserDecision(userId: string, clientId: string, allow: boolean, scope: [string],
                      cb: (err: any, decision: IUserDecisionDocument)=> void): void;
 
   findUserDecision(userId: string, clientId: string, cb: (err: any, decision: IUserDecisionDocument)=> void ): void;
 
-disableOldDecision(userId: string, clientId: string, cb: (err: any)=> void): void;
+  disableOldDecision(userId: string, clientId: string, cb: (err: any)=> void): void;
 }
 
 const userDecisionSchema = new mongoose.Schema({
@@ -29,11 +30,12 @@ const userDecisionSchema = new mongoose.Schema({
   client: {type: mongoose.Schema.Types.ObjectId, ref: 'client'},
   allow: Boolean,
   usable: Boolean,
+  scope: [mongoose.Schema.Types.String],
   date: Date,
   expirationDate: Date
 });
 
-userDecisionSchema.static('createUserDecision', function (userId: string, clientId: string, allow: boolean,
+userDecisionSchema.static('createUserDecision', function (userId: string, clientId: string, allow: boolean, scope: [string],
   cb: (err: any, decision: IUserDecisionDocument)=> void): void {
 
   const now: Date = new Date();
@@ -44,6 +46,7 @@ userDecisionSchema.static('createUserDecision', function (userId: string, client
     client: clientId,
     allow: allow,
     usable: true,
+    scope: scope,
     date: now,
     expirationDate: expiration
   }, cb);

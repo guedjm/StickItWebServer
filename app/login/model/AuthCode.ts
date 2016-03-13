@@ -10,6 +10,7 @@ export interface IAuthCodeDocument extends mongoose.Document {
   user: string | IUserDocument;
   client: string | IClientDocument;
   redirectUri: string;
+  scope: [string];
   usable: boolean;
   deliveryDate: Date;
   expirationDate: Date;
@@ -21,7 +22,8 @@ export interface IAuthCodeDocument extends mongoose.Document {
 
 export interface IAuthCodeDocumentModel extends mongoose.Model<IAuthCodeDocument> {
 
-  createCode(userId: string, clientId: string, redirectUri: string, cb: (err:any, code: IAuthCodeDocument)=> void): void;
+  createCode(userId: string, clientId: string, redirectUri: string, scope: [string],
+             cb: (err:any, code: IAuthCodeDocument)=> void): void;
   getCode(code: string, clientId: string, cb: (err: any, code: IAuthCodeDocument)=> void) : void;
 }
 
@@ -30,13 +32,14 @@ const authCodeSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'user'},
   client: { type: mongoose.Schema.Types.ObjectId, ref: 'client'},
   redirectUri: mongoose.Schema.Types.String,
+  scope: [mongoose.Schema.Types.String],
   usable: Boolean,
   deliveryDate: Date,
   expirationDate: Date,
   useDate: Date
 });
 
-authCodeSchema.static('createCode', function (userId: string, clientId: string, redirectUri: string,
+authCodeSchema.static('createCode', function (userId: string, clientId: string, redirectUri: string, scope: [string],
                                               cb: (err:any, code: IAuthCodeDocument)=> void): void {
 
   const now = new Date();
@@ -46,6 +49,7 @@ authCodeSchema.static('createCode', function (userId: string, clientId: string, 
     user: userId,
     client: clientId,
     redirectUri: redirectUri,
+    scope: scope,
     usable: true,
     deliveryDate: now,
     expirationDate: expirationDate

@@ -26,7 +26,7 @@ server.deserializeClient(function(id: string, cb: (err: any, client: IClientDocu
 
 //Password grant
 server.exchange(oauth2orize.exchange.password(
-  function (client:IClientDocument, username:string, password:string, scope:string, done:Function):void {
+  function (client:IClientDocument, username:string, password: string, scope: [string], done:Function):void {
 
     const userModel:IUserDocumentModel = ModelManager.getUserModel();
     userModel.findUserByEmail(username,
@@ -49,7 +49,7 @@ server.exchange(oauth2orize.exchange.password(
               }
               else {
                 const accessTokenModel:IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
-                accessTokenModel.createToken("password", user._id, client._id,
+                accessTokenModel.createToken("password", user._id, client._id, scope,
                   function (err:any, accessToken:IAccessTokenDocument):void {
                     if (err) {
                       done(err);
@@ -60,7 +60,7 @@ server.exchange(oauth2orize.exchange.password(
                     else {
 
                       const refreshTokenModel:IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
-                      refreshTokenModel.createToken("password", user._id, client._id,
+                      refreshTokenModel.createToken("password", user._id, client._id, scope,
                         function (err:any, refreshToken:IRefreshTokenDocument):void {
                           if (err) {
                             done(err);
@@ -85,15 +85,15 @@ server.exchange(oauth2orize.exchange.password(
 server.grant(oauth2orize.grant.code(function(client: IClientDocument,
                                              redirectUri: string, user: IUserDocument, ares: any, cb: (err: any, code: string | boolean)=> void): void {
 
+  const scope = ares.scope || ["none"];
   const codeModel: IAuthCodeDocumentModel = ModelManager.getAuthCodeModel();
-  codeModel.createCode(user._id, client._id, redirectUri, (err: any, code: IAuthCodeDocument): void  => {
+  codeModel.createCode(user._id, client._id, redirectUri, scope, (err: any, code: IAuthCodeDocument): void  => {
     cb(err, code == undefined ? false : code.code);
   });
 }));
 
 server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, code: string, redirectURI: string,
                                                     done: (err: any, token?: string | boolean, rToken?: string, option?: Object)=> void ): void {
-
   const codeModel: IAuthCodeDocumentModel = ModelManager.getAuthCodeModel();
   codeModel.getCode(code, client._id, function (err: any, authCode: IAuthCodeDocument) {
     if (err) {
@@ -121,7 +121,7 @@ server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, cod
                   done(err);
                 }
                 else {
-                  accessTokenModel.createToken('authorization_code', authCode.user, authCode.client,
+                  accessTokenModel.createToken('authorization_code', authCode.user, authCode.client, authCode.scope,
                     function (err:any, aToken: IAccessTokenDocument): void {
                       if (err) {
                         done(err);
@@ -131,7 +131,7 @@ server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, cod
                       }
                       else {
 
-                        refreshTokenModel.createToken('authorization_code', authCode.user, authCode.client,
+                        refreshTokenModel.createToken('authorization_code', authCode.user, authCode.client, authCode.scope,
                         function (err: any, rToken: IRefreshTokenDocument): void {
                           done(null, aToken.token, rToken.token, {expire_in: 3600});
                         });
@@ -175,14 +175,14 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client: IClientDocum
             else {
 
               //Generate token
-              accessTokenModel.createToken('refresh_token', rToken.user, client._id,
+              accessTokenModel.createToken('refresh_token', rToken.user, client._id, rToken.scope,
                 function (err: any, aToken: IAccessTokenDocument): void {
                 if (err) {
                   done(err);
                 }
                 else {
 
-                  refreshTokenModel.createToken('refresh_token', rToken.user, client._id,
+                  refreshTokenModel.createToken('refresh_token', rToken.user, client._id, rToken.scope,
                     function (err: any, newRToken: IRefreshTokenDocument): void {
                       if (err) {
                         done(err);
@@ -203,6 +203,7 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client: IClientDocum
 
 function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
 
+  const scopes: [string] = req.oauth2.req.scope || ["none"];
   const userDecision: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
 
   userDecision.disableOldDecision(req.user._id, req.oauth2.client._id, function (err: any) {
@@ -210,13 +211,13 @@ function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
       done(err);
     }
     else {
-      userDecision.createUserDecision(req.user._id, req.oauth2.client._id, req.body.allow != undefined,
+      userDecision.createUserDecision(req.user._id, req.oauth2.client._id, req.body.allow != undefined, scopes,
         function (err:any, decision: IUserDecisionDocument): void {
           if (err) {
             done(err);
           }
           else {
-            done(null, {allow: req.body.allow != undefined});
+            done(null, {allow: req.body.allow != undefined, scope: scopes});
           }
         });
     }
@@ -224,9 +225,10 @@ function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
 }
 
 export const authorizationEndPoint: RequestHandler[] = [
-  server.authorization(function (clientId: string, redirectUri: string,
+  server.authorization(function (clientId: string, redirectUri: string, scope: [string],
                                  done: (err: any, client?: IClientDocument | boolean, redirectURI?: string | boolean)=> void): void {
 
+    //TODO: check scope
     const clientModel:IClientDocumentModel = ModelManager.getClientModel();
     clientModel.findByClientId(clientId, function (err:any, client:IClientDocument):void {
       if (err) {
@@ -239,15 +241,17 @@ export const authorizationEndPoint: RequestHandler[] = [
         done(null, client, redirectUri);
       }
     });
-  }, function (clientId: string, userId: string, done: (arr:any, result: boolean)=> void): void {
+  }, function (clientId: string, userId: string, scope: [string], done: (arr:any, result: boolean, info?: any)=> void): void {
 
+    //TODO: Find with scope
+    const scopes = scope || ["none"];
     const userDecisionModel: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
     userDecisionModel.findUserDecision(userId, clientId, function (err: any, decision: IUserDecisionDocument): void {
       if (err) {
         done(err, false);
       }
       else {
-        done(null, (decision != undefined) ? decision.allow : false);
+        done(null, (decision != undefined) ? decision.allow : false, {scope: scopes});
       }
     });
   }), server.errorHandler()];
