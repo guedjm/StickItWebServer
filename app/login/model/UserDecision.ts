@@ -20,7 +20,8 @@ export interface IUserDecisionDocumentModel extends mongoose.Model<IUserDecision
   createUserDecision(userId: string, clientId: string, allow: boolean, scope: [string],
                      cb: (err: any, decision: IUserDecisionDocument)=> void): void;
 
-  findUserDecision(userId: string, clientId: string, cb: (err: any, decision: IUserDecisionDocument)=> void ): void;
+  findUserDecision(userId: string, clientId: string, scope: [string],
+                   cb: (err: any, decision: IUserDecisionDocument)=> void ): void;
 
   disableOldDecision(userId: string, clientId: string, cb: (err: any)=> void): void;
 }
@@ -52,10 +53,11 @@ userDecisionSchema.static('createUserDecision', function (userId: string, client
   }, cb);
 });
 
-userDecisionSchema.static('findUserDecision', function (userId: string, clientId: string,
+userDecisionSchema.static('findUserDecision', function (userId: string, clientId: string, scope: [string],
                                                         cb: (err: any, decision: IUserDecisionDocument)=> void ): void {
 
-  UserDecisionModel.findOne({user: userId, client: clientId, usable: true, expirationDate: {$gt: new Date()}},
+  UserDecisionModel.findOne({user: userId, client: clientId, usable: true,
+    expirationDate: {$gt: new Date()}, scope: { $all: scope}},
     cb);
 });
 

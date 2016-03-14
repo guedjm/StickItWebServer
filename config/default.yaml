@@ -12,5 +12,5 @@ authServer:
   accessTokenDuration: 60 #60 Mins
   refreshTokenDuration: 72 #72h
   scopes:
-    - all
     - none
+    - all
