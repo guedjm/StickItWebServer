@@ -1,8 +1,9 @@
-import {RequestHandler} from "express";
 'use strict';
 
 import * as passport from "passport"
-import { ModelManager } from "../model/ModelManager";
+import { RequestHandler } from "express";
+
+import ModelManager from "../model/ModelManager";
 import { IUserDocument, IUserDocumentModel } from "../model/User";
 
 const LocalStrategy = require("passport-local").Strategy;
@@ -54,4 +55,5 @@ passport.deserializeUser(function(userPublicId: string, done: (err: any, user?: 
   });
 });
 
-export const validateLogin: RequestHandler = passport.authenticate('login', { failureRedirect: '/login' });
+const validateLogin: RequestHandler = passport.authenticate('login', {});
+export default validateLogin;

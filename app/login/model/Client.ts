@@ -1,6 +1,7 @@
 'use strict';
 
 import * as mongoose from "mongoose";
+
 import { Utils } from "../misc/Utils";
 
 export interface IClientDocument extends mongoose.Document {

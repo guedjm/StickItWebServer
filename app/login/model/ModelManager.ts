@@ -7,7 +7,7 @@ import { IRefreshTokenDocumentModel, RefreshTokenModel} from "./RefreshToken";
 import { IAuthCodeDocumentModel, AuthCodeModel} from "./AuthCode";
 import { IUserDecisionDocumentModel, UserDecisionModel} from "./UserDecision";
 
-export class ModelManager {
+export default class ModelManager {
 
   static getClientModel():IClientDocumentModel {
     return <IClientDocumentModel>ClientDocumentModel;

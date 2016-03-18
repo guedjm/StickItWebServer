@@ -1,19 +1,19 @@
 'use strict';
 
 import * as http from "http";
+import * as vhost from "vhost";
+import * as config from "config";
 import * as express from "express";
 import * as mongoose from "mongoose";
-import * as vhost from "vhost";
-import * as bodyParser from "body-parser";
 import * as passport from "passport";
-import * as session from "express-session";
-import * as config from "config";
 import { info, error } from "winston";
-import { StickItAuthServer } from "../app/login/StickItAuthServer";
-import { StickItError } from "../misc/Error";
+import StickItError from "../misc/Error";
+import * as bodyParser from "body-parser";
+import * as session from "express-session";
+import StickItAuthServer from "../app/login/StickItAuthServer";
 
 
-export class StickItServer {
+export default class StickItServer {
 
   private exp:express.Express;
   private server:http.Server;

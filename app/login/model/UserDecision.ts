@@ -1,8 +1,9 @@
-import {IClientDocument} from "./Client";
 'use strict';
 
 import * as mongoose from "mongoose";
+
 import { IUserDocument } from "./User";
+import {IClientDocument} from "./Client";
 
 export interface IUserDecisionDocument extends mongoose.Document {
 

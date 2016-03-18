@@ -1,8 +1,9 @@
 'use strict';
 
 import * as express from "express";
-import { ModelManager } from "../model/ModelManager";
-import { StickItError } from "../../../misc/Error";
+
+import ModelManager from "../model/ModelManager";
+import StickItError from "../../../misc/Error";
 import { IUserDocument, IUserDocumentModel } from "../model/User";
 
 export function createUser(req: express.Request, res: express.Response, next: express.NextFunction) {

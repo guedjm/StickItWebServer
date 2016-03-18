@@ -3,14 +3,14 @@
 import * as express from "express";
 import { info } from "winston";
 
-import { isBasicAuth } from "./auth/BasicAuth";
-import { validateLogin } from "./auth/LoginAuth";
+import isBasicAuth from "./auth/BasicAuth";
+import validateLogin from "./auth/LoginAuth";
 import * as ClientController from "./controller/Client";
 import * as UserController from "./controller/User";
 import * as OAuth2Controller from "./controller/OAuth2"
 import * as LoginController from "./controller/Login";
 
-export class StickItAuthServer {
+export default class StickItAuthServer {
 
   private router:express.Router;
 

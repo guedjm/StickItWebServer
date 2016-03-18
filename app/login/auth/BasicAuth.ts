@@ -1,7 +1,7 @@
 'use strict';
 
 import * as passport from "passport";
-import { ModelManager } from "../model/ModelManager";
+import ModelManager from "../model/ModelManager";
 import { IClientDocument, IClientDocumentModel } from "../model/Client";
 
 
@@ -40,4 +40,5 @@ passport.use('client-password', new ClientPasswordStrategy((clientId: string, cl
   });
 }));
 
-export const isBasicAuth = passport.authenticate(['client-basic', 'client-password'], { session: false });
+const isBasicAuth = passport.authenticate(['client-basic', 'client-password'], { session: false });
+export default isBasicAuth;

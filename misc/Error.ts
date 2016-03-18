@@ -1,6 +1,6 @@
 'use strict';
 
-export class StickItError extends Error {
+export default class StickItError extends Error {
   httpStatus:number;
   errorCode:number;
   errorSubCode:number;

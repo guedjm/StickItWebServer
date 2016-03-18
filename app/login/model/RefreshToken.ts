@@ -1,10 +1,11 @@
 'use strict';
 
-import { Utils } from "../misc/Utils";
 import * as mongoose from "mongoose";
 import * as config from "config";
-import {IClientDocument} from "./Client";
+
 import {IUserDocument} from "./User";
+import { Utils } from "../misc/Utils";
+import {IClientDocument} from "./Client";
 
 
 export interface IRefreshTokenDocument extends mongoose.Document {

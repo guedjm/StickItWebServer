@@ -1,8 +1,9 @@
 'use strict';
 
 import * as express from "express";
-import { ModelManager } from "../model/ModelManager";
-import { StickItError } from "../../../misc/Error";
+
+import ModelManager from "../model/ModelManager";
+import StickItError from "../../../misc/Error";
 import { IClientDocument, IClientDocumentModel } from "../model/Client";
 
 export function createClient(req:express.Request, res:express.Response, next:express.NextFunction) {

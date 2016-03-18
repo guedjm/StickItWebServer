@@ -2,7 +2,8 @@
 
 import * as mongoose from "mongoose";
 import * as config from "config";
-import { Utils } from "../misc/Utils";
+
+import {Utils} from "../misc/Utils";
 import {IUserDocument} from "./User";
 import {IClientDocument} from "./Client";
 

@@ -2,6 +2,7 @@
 
 import * as bcrypt from "bcrypt";
 import * as mongoose from "mongoose";
+
 import { Utils } from "../misc/Utils";
 
 export interface IUserDocument extends mongoose.Document {

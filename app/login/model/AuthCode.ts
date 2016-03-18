@@ -1,9 +1,10 @@
 'use strict';
 
 import * as mongoose from "mongoose";
+
+import {Utils} from "../misc/Utils";
 import {IUserDocument} from "./User";
 import {IClientDocument} from "./Client";
-import {Utils} from "../misc/Utils";
 
 export interface IAuthCodeDocument extends mongoose.Document {
   code: string;

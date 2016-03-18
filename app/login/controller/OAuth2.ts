@@ -3,18 +3,18 @@
 const oauth2orize = require('oauth2orize');
 const server = oauth2orize.createServer();
 
-import * as queryStr from "querystring";
 import * as config from "config";
-import {ModelManager} from "../model/ModelManager";
-import {IClientDocument, IClientDocumentModel} from "../model/Client";
+import * as queryStr from "querystring";
+import {Request, Response, NextFunction, RequestHandler} from "express";
+
+
+import ModelManager from "../model/ModelManager";
 import {IUserDocument, IUserDocumentModel} from "../model/User";
+import {IClientDocument, IClientDocumentModel} from "../model/Client";
+import {IAuthCodeDocument, IAuthCodeDocumentModel} from "../model/AuthCode";
 import {IAccessTokenDocument, IAccessTokenDocumentModel} from "../model/AccessToken";
 import {IRefreshTokenDocument, IRefreshTokenDocumentModel} from "../model/RefreshToken";
-import {Request, Response, NextFunction, RequestHandler} from "express";
-import {IAuthCodeDocumentModel} from "../model/AuthCode";
-import {IAuthCodeDocument} from "../model/AuthCode";
-import {IUserDecisionDocumentModel} from "../model/UserDecision";
-import {IUserDecisionDocument} from "../model/UserDecision";
+import {IUserDecisionDocument, IUserDecisionDocumentModel} from "../model/UserDecision";
 
 server.serializeClient(function(client: IClientDocument, cb: (err: any, clientId: string)=> void): void {
   return cb(null, client.id);

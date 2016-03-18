@@ -2,6 +2,7 @@
 
 import * as express from "express";
 import * as queryStr from "querystring";
+
 import { isLogged } from "../controller/OAuth2";
 
 export function loginForm(req: express.Request, res: express.Response, next: express.NextFunction): void {
