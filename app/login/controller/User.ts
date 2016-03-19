@@ -1,23 +1,24 @@
-'use strict';
+import {IUserDocumentModel} from "../model/User";
+"use strict";
 
 import * as express from "express";
 
 import ModelManager from "../model/ModelManager";
 import StickItError from "../../../misc/Error";
-import { IUserDocument, IUserDocumentModel } from "../model/User";
+import { IUserDocument } from "../model/User";
 
-export function createUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+export function createUser(req: express.Request, res: express.Response, next: express.NextFunction): any {
 
-  if (req.body.email == undefined || req.body.password == undefined) {
+  if (req.body.email === undefined || req.body.password === undefined) {
     next(StickItError.invalidRequestError());
   }
   else {
-    const userModel = ModelManager.getUserModel();
+    const userModel: IUserDocumentModel = ModelManager.getUserModel();
     userModel.createUser(req.body.email, req.body.password, (err: any, user: IUserDocument): void => {
       if (err) {
         next(err);
       }
-      else if (user == undefined) {
+      else if (user === undefined) {
         next(StickItError.internalServerError());
       }
       else {

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const oauth2orize = require('oauth2orize');
-const server = oauth2orize.createServer();
+const oauth2orize: any = require("oauth2orize");
+const server: any = oauth2orize.createServer();
 
 import * as config from "config";
 import * as queryStr from "querystring";
@@ -16,69 +16,69 @@ import {IAccessTokenDocument, IAccessTokenDocumentModel} from "../model/AccessTo
 import {IRefreshTokenDocument, IRefreshTokenDocumentModel} from "../model/RefreshToken";
 import {IUserDecisionDocument, IUserDecisionDocumentModel} from "../model/UserDecision";
 
-server.serializeClient(function(client: IClientDocument, cb: (err: any, clientId: string)=> void): void {
-  return cb(null, client.id);
+server.serializeClient(function(client: IClientDocument, cb: (err: any, clientId: string) => void): void {
+  return cb(undefined, client.id);
 });
 
-server.deserializeClient(function(id: string, cb: (err: any, client: IClientDocument)=> void): void {
+server.deserializeClient(function(id: string, cb: (err: any, client: IClientDocument) => void): void {
   const clientModel: IClientDocumentModel = ModelManager.getClientModel();
-  clientModel.findByClientId(id,cb);
+  clientModel.findByClientId(id, cb);
 });
 
-//Password grant
+// Password grant
 server.exchange(oauth2orize.exchange.password(
-  function (client:IClientDocument, username:string, password: string, scope: [string], done:Function):void {
+  function(client: IClientDocument, username: string, password: string, scope: [string], done: Function): void {
 
-    checkScope(scope, function (err: any, scope: [string]): void {
+    checkScope(scope, function(err: any, scope: [string]): void {
       console.log(scope);
       console.log(err);
       if (err) {
         done(err);
       }
       else {
-        const userModel:IUserDocumentModel = ModelManager.getUserModel();
+        const userModel: IUserDocumentModel = ModelManager.getUserModel();
         userModel.findUserByEmail(username,
-          function (err:any, user:IUserDocument):void {
+          function(err: any, user: IUserDocument): void {
             if (err) {
               done(err);
             }
-            else if (user == undefined) {
-              done(null, false);
+            else if (user === undefined) {
+              done(undefined, false);
             }
             else {
 
               user.verifyPassword(password,
-                function (err:any, match:boolean):void {
+                function(err: any, match: boolean): void {
                   if (err) {
                     done(err);
                   }
-                  else if (match == false) {
-                    done(null, false);
+                  else if (match === false) {
+                    done(undefined, false);
                   }
                   else {
-                    const accessTokenModel:IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
+                    const accessTokenModel: IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
                     accessTokenModel.createToken("password", user._id, client._id, scope,
-                      function (err:any, accessToken:IAccessTokenDocument):void {
+                      function(err: any, accessToken: IAccessTokenDocument): void {
                         if (err) {
                           done(err);
                         }
-                        else if (accessToken == undefined) {
-                          done(null, false);
+                        else if (accessToken === undefined) {
+                          done(undefined, false);
                         }
                         else {
 
-                          const refreshTokenModel:IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
+                          const refreshTokenModel: IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
                           refreshTokenModel.createToken("password", user._id, client._id, scope,
-                            function (err:any, refreshToken:IRefreshTokenDocument):void {
+                            function(err: any, refreshToken: IRefreshTokenDocument): void {
                               if (err) {
                                 done(err);
                               }
-                              else if (refreshToken == undefined) {
-                                done(null, false);
+                              else if (refreshToken === undefined) {
+                                done(undefined, false);
                               }
                               else {
 
-                                done(null, accessToken.token, refreshToken.token, {expires_in: accessToken.expirationDate});
+                                done(undefined, accessToken.token, refreshToken.token, { expires_in: accessToken.expirationDate });
                               }
                             });
                         }
@@ -91,35 +91,35 @@ server.exchange(oauth2orize.exchange.password(
     });
   }));
 
-//Code grant
+// Code grant
 server.grant(oauth2orize.grant.code(function(client: IClientDocument,
-                                             redirectUri: string, user: IUserDocument, ares: any, cb: (err: any, code: string | boolean)=> void): void {
+  redirectUri: string, user: IUserDocument, ares: any, cb: (err: any, code: string | boolean) => void): void {
 
-  checkScope(ares.scope, function (err: any, scope: [string]): void {
+  checkScope(ares.scope, function(err: any, scope: [string]): void {
     if (err) {
       cb(err, false);
     }
     else {
       const codeModel: IAuthCodeDocumentModel = ModelManager.getAuthCodeModel();
-      codeModel.createCode(user._id, client._id, redirectUri, scope, (err: any, code: IAuthCodeDocument): void  => {
-        cb(err, code == undefined ? false : code.code);
+      codeModel.createCode(user._id, client._id, redirectUri, scope, (err: any, code: IAuthCodeDocument): void => {
+        cb(err, code === undefined ? false : code.code);
       });
     }
   });
 }));
 
-server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, code: string, redirectURI: string,
-                                                    done: (err: any, token?: string | boolean, rToken?: string, option?: Object)=> void ): void {
+server.exchange(oauth2orize.exchange.code(function(client: IClientDocument, code: string, redirectURI: string,
+  done: (err: any, token?: string | boolean, rToken?: string, option?: Object) => void): void {
   const codeModel: IAuthCodeDocumentModel = ModelManager.getAuthCodeModel();
-  codeModel.getCode(code, client._id, function (err: any, authCode: IAuthCodeDocument) {
+  codeModel.getCode(code, client._id, function(err: any, authCode: IAuthCodeDocument): void {
     if (err) {
       done(err);
     }
-    else if (authCode == undefined) {
-      done(null, false);
+    else if (authCode === undefined) {
+      done(undefined, false);
     }
     else {
-      authCode.useCode(function (err: any) {
+      authCode.useCode(function(err: any): void {
         if (err) {
           done(err);
         }
@@ -127,30 +127,30 @@ server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, cod
           const accessTokenModel: IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
           const refreshTokenModel: IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
 
-          accessTokenModel.disableOldToken(client._id, authCode.user, function (err: any):void {
+          accessTokenModel.disableOldToken(client._id, authCode.user, function(err: any): void {
             if (err) {
               done(err);
             }
             else {
-              refreshTokenModel.disableOldToken(client._id, authCode.user, function (err: any): void {
+              refreshTokenModel.disableOldToken(client._id, authCode.user, function(err: any): void {
                 if (err) {
                   done(err);
                 }
                 else {
-                  accessTokenModel.createToken('authorization_code', authCode.user, authCode.client, authCode.scope,
-                    function (err:any, aToken: IAccessTokenDocument): void {
+                  accessTokenModel.createToken("authorization_code", authCode.user, authCode.client, authCode.scope,
+                    function(err: any, aToken: IAccessTokenDocument): void {
                       if (err) {
                         done(err);
                       }
-                      else if (aToken == undefined) {
-                        done(null, false);
+                      else if (aToken === undefined) {
+                        done(undefined, false);
                       }
                       else {
 
-                        refreshTokenModel.createToken('authorization_code', authCode.user, authCode.client, authCode.scope,
-                        function (err: any, rToken: IRefreshTokenDocument): void {
-                          done(null, aToken.token, rToken.token, {expire_in: 3600});
-                        });
+                        refreshTokenModel.createToken("authorization_code", authCode.user, authCode.client, authCode.scope,
+                          function(err: any, rToken: IRefreshTokenDocument): void {
+                            done(undefined, aToken.token, rToken.token, { expire_in: 3600 });
+                          });
                       }
                     });
                 }
@@ -164,53 +164,53 @@ server.exchange(oauth2orize.exchange.code(function (client: IClientDocument, cod
 }));
 
 
-//Refresh token grant
-server.exchange(oauth2orize.exchange.refreshToken(function (client: IClientDocument, refreshToken: string, scope: [string],
-                                                            done: (err: any, aToken?: string, rToken?: string, params?: Object)=> void): void {
+// Refresh token grant
+server.exchange(oauth2orize.exchange.refreshToken(function(client: IClientDocument, refreshToken: string, scope: [string],
+  done: (err: any, aToken?: string, rToken?: string, params?: Object) => void): void {
 
-  checkScope(scope, function (err: any, scope: [string]): void {
+  checkScope(scope, function(err: any, scope: [string]): void {
     if (err) {
       done(err);
     }
     else {
 
       const refreshTokenModel: IRefreshTokenDocumentModel = ModelManager.getRefreshTokenModel();
-      refreshTokenModel.getToken(refreshToken, client._id, scope, function (err: any, rToken: IRefreshTokenDocument): void {
+      refreshTokenModel.getToken(refreshToken, client._id, scope, function(err: any, rToken: IRefreshTokenDocument): void {
         if (err) {
           done(err);
         }
-        else if (rToken == undefined) {
-          done(null);
+        else if (rToken === undefined) {
+          done(undefined);
         }
         else {
-          const accessTokenModel:IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
-          accessTokenModel.disableOldToken(client._id, rToken.user, function (err:any):void {
+          const accessTokenModel: IAccessTokenDocumentModel = ModelManager.getAccessTokenModel();
+          accessTokenModel.disableOldToken(client._id, rToken.user, function(err: any): void {
             if (err) {
               done(err);
             }
             else {
 
-              refreshTokenModel.disableOldToken(client._id, rToken.user, function (err:any):void {
+              refreshTokenModel.disableOldToken(client._id, rToken.user, function(err: any): void {
                 if (err) {
                   done(err);
                 }
                 else {
 
-                  //Generate token
-                  accessTokenModel.createToken('refresh_token', rToken.user, client._id, rToken.scope,
-                    function (err:any, aToken:IAccessTokenDocument):void {
+                  // Generate token
+                  accessTokenModel.createToken("refresh_token", rToken.user, client._id, rToken.scope,
+                    function(err: any, aToken: IAccessTokenDocument): void {
                       if (err) {
                         done(err);
                       }
                       else {
 
-                        refreshTokenModel.createToken('refresh_token', rToken.user, client._id, rToken.scope,
-                          function (err:any, newRToken:IRefreshTokenDocument):void {
+                        refreshTokenModel.createToken("refresh_token", rToken.user, client._id, rToken.scope,
+                          function(err: any, newRToken: IRefreshTokenDocument): void {
                             if (err) {
                               done(err);
                             }
                             else {
-                              done(null, aToken.token, newRToken.token, {expire_in: 3600});
+                              done(undefined, aToken.token, newRToken.token, { expire_in: 3600 });
                             }
                           });
                       }
@@ -225,47 +225,47 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client: IClientDocum
   });
 }));
 
-function checkScope(scope: [string], cb: (err: any, scopes?: [string])=> void): void {
+function checkScope(scope: [string], cb: (err: any, scopes?: [string]) => void): void {
 
   let valid: boolean = true;
   const availableScopes: [string] = config.get<[string]>("authServer.scopes");
 
-  if (scope != undefined && scope.length > 0) {
+  if (scope !== undefined && scope.length > 0) {
 
-    scope.forEach(function (elem: string): void {
-      if (availableScopes.indexOf(elem) == -1) {
+    scope.forEach(function(elem: string): void {
+      if (availableScopes.indexOf(elem) === -1) {
         valid = false;
       }
     });
 
   } else {
-    scope = [ availableScopes[0] ];
+    scope = [availableScopes[0]];
   }
-  cb(valid ? null : new oauth2orize.AuthorizationError('Invalid scope', 'invalid_scope'),
+  cb(valid ? undefined : new oauth2orize.AuthorizationError("Invalid scope", "invalid_scope"),
     scope);
 }
 
-function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
+function saveUserDecision(req: any, done: (err: any, param?: any) => void): void {
 
-  checkScope(req.oauth2.req.scope, function (err: any, scope: [string]): void {
+  checkScope(req.oauth2.req.scope, function(err: any, scope: [string]): void {
     if (err) {
       done(err);
     }
     else {
       const userDecision: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
 
-      userDecision.disableOldDecision(req.user._id, req.oauth2.client._id, function (err: any) {
+      userDecision.disableOldDecision(req.user._id, req.oauth2.client._id, function(err: any): void {
         if (err) {
           done(err);
         }
         else {
-          userDecision.createUserDecision(req.user._id, req.oauth2.client._id, req.body.allow != undefined, scope,
-            function (err:any, decision: IUserDecisionDocument): void {
+          userDecision.createUserDecision(req.user._id, req.oauth2.client._id, req.body.allow !== undefined, scope,
+            function(err: any, decision: IUserDecisionDocument): void {
               if (err) {
                 done(err);
               }
               else {
-                done(null, {allow: req.body.allow != undefined, scope: scope});
+                done(undefined, { allow: req.body.allow !== undefined, scope: scope });
               }
             });
         }
@@ -275,59 +275,59 @@ function saveUserDecision(req: any, done: (err: any, param?: any)=> void) {
 }
 
 export const authorizationEndPoint: RequestHandler[] = [
-  server.authorization(function (clientId: string, redirectUri: string, scope: [string],
-                                 done: (err: any, client?: IClientDocument | boolean, redirectURI?: string | boolean)=> void): void {
+  server.authorization(function(clientId: string, redirectUri: string, scope: [string],
+    done: (err: any, client?: IClientDocument | boolean, redirectURI?: string | boolean) => void): void {
 
-    checkScope(scope, function (err: any, scope: [string]): void {
+    checkScope(scope, function(err: any, scope: [string]): void {
       if (err) {
         done(err);
       }
       else {
-        const clientModel:IClientDocumentModel = ModelManager.getClientModel();
-        clientModel.findByClientId(clientId, function (err:any, client:IClientDocument):void {
+        const clientModel: IClientDocumentModel = ModelManager.getClientModel();
+        clientModel.findByClientId(clientId, function(err: any, client: IClientDocument): void {
           if (err) {
-            done(err)
+            done(err);
           }
-          else if (client == undefined || client.redirectURI.indexOf(redirectUri) == -1) {
-            done(null, false, false);
+          else if (client === undefined || client.redirectURI.indexOf(redirectUri) === -1) {
+            done(undefined, false, false);
           }
           else {
-            done(null, client, redirectUri);
+            done(undefined, client, redirectUri);
           }
         });
       }
     });
-  }, function (clientId: string, userId: string, scope: [string], done: (err: any, result?: boolean, info?: any)=> void): void {
+  }, function(clientId: string, userId: string, scope: [string], done: (err: any, result?: boolean, info?: any) => void): void {
 
-    checkScope(scope, function (err: any, scope: [string]): void {
+    checkScope(scope, function(err: any, scope: [string]): void {
       if (err) {
         done(err);
       }
       else {
         const userDecisionModel: IUserDecisionDocumentModel = ModelManager.getUserDecisionModel();
-        userDecisionModel.findUserDecision(userId, clientId, scope, function (err: any, decision: IUserDecisionDocument): void {
+        userDecisionModel.findUserDecision(userId, clientId, scope, function(err: any, decision: IUserDecisionDocument): void {
           if (err) {
             done(err);
           }
           else {
-            done(null, (decision != undefined) ? decision.allow : false, {scope: scope});
+            done(undefined, (decision !== undefined) ? decision.allow : false, { scope: scope });
           }
         });
       }
     });
   }), server.errorHandler()];
 
-export const sserver = server;
+export const sserver: any = server;
 export const decisionEndPoint: RequestHandler[] = [server.decision({}, saveUserDecision), server.errorHandler()];
-export const tokenEndPoint:RequestHandler[] = [server.token(), server.errorHandler()];
+export const tokenEndPoint: RequestHandler[] = [server.token(), server.errorHandler()];
 
 export function isLogged(req: Request): boolean {
-  return req.session['publicId'] != undefined;
+  return req.session["publicId"] !== undefined;
 }
 
-export function userLogged(req: Request, res: Response, next: NextFunction) {
-  if (req.user == undefined) {
-    res.redirect('/login?' + queryStr.stringify(req.query));
+export function userLogged(req: Request, res: Response, next: NextFunction): any {
+  if (req.user === undefined) {
+    res.redirect("/login?" + queryStr.stringify(req.query));
   }
   else {
     next();

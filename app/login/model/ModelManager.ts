@@ -1,35 +1,35 @@
-'use strict';
+"use strict";
 
-import { IClientDocumentModel, ClientDocumentModel} from "./Client";
-import { IUserDocumentModel, UserDocumentModel} from "./User";
-import { IAccessTokenDocumentModel, AccessTokenModel} from "./AccessToken";
-import { IRefreshTokenDocumentModel, RefreshTokenModel} from "./RefreshToken";
-import { IAuthCodeDocumentModel, AuthCodeModel} from "./AuthCode";
-import { IUserDecisionDocumentModel, UserDecisionModel} from "./UserDecision";
+import { IClientDocumentModel, clientDocumentModel} from "./Client";
+import { IUserDocumentModel, userDocumentModel} from "./User";
+import { IAccessTokenDocumentModel, accessTokenModel} from "./AccessToken";
+import { IRefreshTokenDocumentModel, refreshTokenModel} from "./RefreshToken";
+import { IAuthCodeDocumentModel, authCodeModel} from "./AuthCode";
+import { IUserDecisionDocumentModel, userDecisionModel} from "./UserDecision";
 
 export default class ModelManager {
 
-  static getClientModel():IClientDocumentModel {
-    return <IClientDocumentModel>ClientDocumentModel;
+  public static getClientModel(): IClientDocumentModel {
+    return <IClientDocumentModel>clientDocumentModel;
   }
 
-  static getUserModel():IUserDocumentModel {
-    return <IUserDocumentModel>UserDocumentModel;
+  public static getUserModel(): IUserDocumentModel {
+    return <IUserDocumentModel>userDocumentModel;
   }
 
-  static getAccessTokenModel():IAccessTokenDocumentModel {
-    return <IAccessTokenDocumentModel>AccessTokenModel;
+  public static getAccessTokenModel(): IAccessTokenDocumentModel {
+    return <IAccessTokenDocumentModel>accessTokenModel;
   }
 
-  static getRefreshTokenModel():IRefreshTokenDocumentModel {
-    return <IRefreshTokenDocumentModel>RefreshTokenModel;
+  public static getRefreshTokenModel(): IRefreshTokenDocumentModel {
+    return <IRefreshTokenDocumentModel>refreshTokenModel;
   }
 
-  static getAuthCodeModel(): IAuthCodeDocumentModel {
-    return <IAuthCodeDocumentModel>AuthCodeModel;
+  public static getAuthCodeModel(): IAuthCodeDocumentModel {
+    return <IAuthCodeDocumentModel>authCodeModel;
   }
 
-  static getUserDecisionModel(): IUserDecisionDocumentModel {
-    return <IUserDecisionDocumentModel>UserDecisionModel;
+  public static getUserDecisionModel(): IUserDecisionDocumentModel {
+    return <IUserDecisionDocumentModel>userDecisionModel;
   }
 }

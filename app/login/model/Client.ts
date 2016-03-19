@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import * as mongoose from "mongoose";
 
@@ -16,12 +16,12 @@ export interface IClientDocument extends mongoose.Document {
 
 export interface IClientDocumentModel extends mongoose.Model<IClientDocument> {
 
-  createClient(name:string, type:number, cb:(err:any, client:IClientDocument)=> void): void;
-  findByClientId(id:string, cb:(err:any, client:IClientDocument)=> void): void;
-  findByClientIdAndSecret(id:string, secret:string, cb:(err:any, client:IClientDocument)=> void): void;
+  createClient(name: string, type: number, cb: (err: any, client: IClientDocument) => void): void;
+  findByClientId(id: string, cb: (err: any, client: IClientDocument) => void): void;
+  findByClientIdAndSecret(id: string, secret: string, cb: (err: any, client: IClientDocument) => void): void;
 }
 
-const clientSchema = new mongoose.Schema({
+const clientSchema: any = new mongoose.Schema({
   id: mongoose.Schema.Types.String,
   type: Number,
   name: mongoose.Schema.Types.String,
@@ -31,24 +31,25 @@ const clientSchema = new mongoose.Schema({
   activated: Boolean
 });
 
-clientSchema.static('createClient', function (name:string, type:number, cb:(err:any, client:IClientDocument)=> void) {
+clientSchema.static("createClient", function(name: string, type: number, cb: (err: any, client: IClientDocument) => void): void {
 
-  ClientDocumentModel.create({
+  clientDocumentModel.create({
     id: Utils.uidGen(25),
     type: type,
     name: name,
     secret: Utils.uidGen(40),
     creationDate: new Date(),
     activated: true
-  }, cb)
+  }, cb);
 });
 
-clientSchema.static('findByClientId', function (clientId:string, cb:(err:any, client:IClientDocument)=> void) {
-  ClientDocumentModel.findOne({id: clientId}, cb);
+clientSchema.static("findByClientId", function(clientId: string, cb: (err: any, client: IClientDocument) => void): void {
+  clientDocumentModel.findOne({ id: clientId }, cb);
 });
 
-clientSchema.static('findByClientIdAndSecret', function (clientId:string, secret:string, cb:(err:any, client:IClientDocument)=> void) {
-  ClientDocumentModel.findOne({id: clientId, secret: secret}, cb);
+clientSchema.static("findByClientIdAndSecret", function(clientId: string, secret: string,
+  cb: (err: any, client: IClientDocument) => void): void {
+  clientDocumentModel.findOne({ id: clientId, secret: secret }, cb);
 });
 
-export const ClientDocumentModel:IClientDocumentModel = <IClientDocumentModel>mongoose.model('client', clientSchema);
+export const clientDocumentModel: IClientDocumentModel = <IClientDocumentModel>mongoose.model("client", clientSchema);

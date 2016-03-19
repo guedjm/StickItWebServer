@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import * as express from "express";
 
@@ -6,18 +6,18 @@ import ModelManager from "../model/ModelManager";
 import StickItError from "../../../misc/Error";
 import { IClientDocument, IClientDocumentModel } from "../model/Client";
 
-export function createClient(req:express.Request, res:express.Response, next:express.NextFunction) {
+export function createClient(req: express.Request, res: express.Response, next: express.NextFunction): void {
 
-  if (req.body.name == undefined || req.body.type == undefined) {
+  if (req.body.name === undefined || req.body.type === undefined) {
     next(StickItError.invalidRequestError());
   }
   else {
-    const clientModel:IClientDocumentModel = ModelManager.getClientModel();
+    const clientModel: IClientDocumentModel = ModelManager.getClientModel();
 
     clientModel.createClient(req.body.name, req.body.type,
-      function (err:any, client:IClientDocument) {
+      function(err: any, client: IClientDocument): void {
 
-        if (err || client == undefined) {
+        if (err || client === undefined) {
           next(StickItError.internalServerError());
         }
         else {
@@ -26,12 +26,12 @@ export function createClient(req:express.Request, res:express.Response, next:exp
             type: client.type,
             name: client.name,
             secret: client.secret
-          }, null, 2));
+          }, undefined, 2));
         }
       });
   }
 }
 
-export function hello(req:express.Request, res:express.Response, next:express.NextFunction) {
-  res.send('Hello');
+export function hello(req: express.Request, res: express.Response): void {
+  res.send("Hello");
 }

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import * as mongoose from "mongoose";
 import * as config from "config";
@@ -18,21 +18,21 @@ export interface IRefreshTokenDocument extends mongoose.Document {
   deliveryDate: Date;
   expirationDate: Date;
 
-  condemn(cb:(err:any)=> void): void;
+  condemn(cb: (err: any) => void): void;
 }
 
 export interface IRefreshTokenDocumentModel extends mongoose.Model<IRefreshTokenDocument> {
 
-  createToken(grant:string, userId:string | IUserDocument, clientId:string | IClientDocument, scope: [string],
-              cb:(err:any, token:IRefreshTokenDocument)=> void): void;
-  getToken(token:string, clientId: string, scope: [string], cb:(err:any, token:IRefreshTokenDocument)=> void): void;
-  disableOldToken(clientId: string, userId: string | IUserDocument, cb: (err: any)=> void): void;
+  createToken(grant: string, userId: string | IUserDocument, clientId: string | IClientDocument, scope: [string],
+    cb: (err: any, token: IRefreshTokenDocument) => void): void;
+  getToken(token: string, clientId: string, scope: [string], cb: (err: any, token: IRefreshTokenDocument) => void): void;
+  disableOldToken(clientId: string, userId: string | IUserDocument, cb: (err: any) => void): void;
 }
 
-const refreshTokenSchema = new mongoose.Schema({
+const refreshTokenSchema: any = new mongoose.Schema({
   grant: mongoose.Schema.Types.String,
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-  client: {type: mongoose.Schema.Types.ObjectId, ref: 'client'},
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+  client: { type: mongoose.Schema.Types.ObjectId, ref: "client" },
   token: mongoose.Schema.Types.String,
   scope: [mongoose.Schema.Types.String],
   usable: Boolean,
@@ -40,12 +40,12 @@ const refreshTokenSchema = new mongoose.Schema({
   expirationDate: Date
 });
 
-refreshTokenSchema.static('createToken', function (grant: string, userId: string, clientId: string, scope: [string],
-                                                   cb:(err:any, token:IRefreshTokenDocument)=> void) {
-  const now = new Date();
-  const expirationDate = now.getTime() + 60 * 60000 * config.get<number>("authServer.accessTokenDuration");
+refreshTokenSchema.static("createToken", function(grant: string, userId: string, clientId: string, scope: [string],
+  cb: (err: any, token: IRefreshTokenDocument) => void): void {
+  const now: Date = new Date();
+  const expirationDate: number = now.getTime() + 60 * 60000 * config.get<number>("authServer.accessTokenDuration");
 
-  RefreshTokenModel.create({
+  refreshTokenModel.create({
     grant: grant,
     user: userId,
     client: clientId,
@@ -57,24 +57,26 @@ refreshTokenSchema.static('createToken', function (grant: string, userId: string
   }, cb);
 });
 
-refreshTokenSchema.static('getToken', function (token:string, clientId: string, scope: [string],
-                                                cb:(err:any, token:IRefreshTokenDocument)=> void) {
-  RefreshTokenModel.findOne({token: token, client: clientId, usable: true,
-    expirationDate: {$gt: new Date()}, scope: {$all: scope}}, cb)
+refreshTokenSchema.static("getToken", function(token: string, clientId: string, scope: [string],
+  cb: (err: any, token: IRefreshTokenDocument) => void): void {
+  refreshTokenModel.findOne({
+    token: token, client: clientId, usable: true,
+    expirationDate: { $gt: new Date() }, scope: { $all: scope }
+  }, cb);
 });
 
-refreshTokenSchema.static('disableOldToken', function (clientId: string, userId: string, cb: (err: any)=> void): void {
+refreshTokenSchema.static("disableOldToken", function(clientId: string, userId: string, cb: (err: any) => void): void {
 
-  RefreshTokenModel.update({client: clientId, user: userId, usable: true}, {usable: false}, {multi: true},
-    function (err: any) {
+  refreshTokenModel.update({ client: clientId, user: userId, usable: true }, { usable: false }, { multi: true },
+    function(err: any): void {
       cb(err);
     });
 });
 
 
-refreshTokenSchema.method('condemn', function (cb:(err:any)=> void) {
+refreshTokenSchema.method("condemn", function(cb: (err: any) => void): void {
   this.usable = false;
   this.save(cb);
 });
 
-export const RefreshTokenModel:IRefreshTokenDocumentModel = <IRefreshTokenDocumentModel>mongoose.model('refreshToken', refreshTokenSchema);
+export const refreshTokenModel: IRefreshTokenDocumentModel = <IRefreshTokenDocumentModel>mongoose.model("refreshToken", refreshTokenSchema);
