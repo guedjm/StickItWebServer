@@ -5,6 +5,7 @@ import { info } from "winston";
 
 import isBasicAuth from "./auth/BasicAuth";
 import validateLogin from "./auth/LoginAuth";
+import * as PingController from "./controller/Ping";
 import * as ClientController from "./controller/Client";
 import * as UserController from "./controller/User";
 import * as OAuth2Controller from "./controller/OAuth2";
@@ -18,6 +19,8 @@ export default class StickItAuthServer {
 
     info("Initializing StickItAuthServer");
     this.router = express.Router();
+
+    this.router.get("/ping", PingController.ping);
 
     this.router.post("/v1/oauth2/client", ClientController.createClient);
     this.router.get("/v1/oauth2/client", isBasicAuth, ClientController.hello);
