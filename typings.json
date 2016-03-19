@@ -5,15 +5,19 @@
   "ambientDependencies": {
     "bcrypt": "github:DefinitelyTyped/DefinitelyTyped/bcrypt/bcrypt.d.ts#30f566d3c9569cbfa6a97da863bdfa58853ca29a",
     "body-parser": "github:DefinitelyTyped/DefinitelyTyped/body-parser/body-parser.d.ts#9a2c50ea846ee6ae36feaea0accc77ae7b08a748",
+    "chai": "registry:dt/chai#3.4.0+20160317120654",
     "config": "registry:dt/config#0.0.0+20160304202503",
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#dd638012d63e069f2c99d06ef4dcc9616a943ee4",
     "express-session": "github:DefinitelyTyped/DefinitelyTyped/express-session/express-session.d.ts#3ca0e0306a56b3dff5e6999dbd1627bf30201cfc",
     "jade": "github:DefinitelyTyped/DefinitelyTyped/jade/jade.d.ts#c69185b594b5a846b84ce1f89864b44cda727df1",
     "mime": "github:DefinitelyTyped/DefinitelyTyped/mime/mime.d.ts#cb5206a8ac1c9a3ddfd126f5ecea6729b2361452",
+    "mocha": "registry:dt/mocha#2.2.5+20160317120654",
     "mongoose": "github:DefinitelyTyped/DefinitelyTyped/mongoose/mongoose.d.ts#cebde64b3a1d63d07ee7c7dbc49b631ce220d027",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#48c1e3c1d6baefa4f1a126f188c27c4fefd36bff",
     "passport": "github:DefinitelyTyped/DefinitelyTyped/passport/passport.d.ts#432545c4d99dba86a5229bed0e500f66f43b1baa",
     "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#0fa4e9e61385646ea6a4cba2aef357353d2ce77f",
+    "superagent": "registry:dt/superagent#1.4.0+20160317120654",
+    "supertest": "registry:dt/supertest#1.1.0+20160317120654",
     "vhost": "file:./typings/main/ambient/vhost/vhost.d.ts",
     "winston": "github:DefinitelyTyped/DefinitelyTyped/winston/winston.d.ts#f29447a4693f90a2543b56eae0efeb344da08cda"
   }

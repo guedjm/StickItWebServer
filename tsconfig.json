@@ -15,6 +15,7 @@
     "./bin/start.ts",
     "./bin/StickItServer.ts",
     "./misc/Error.ts",
+    "./test/Hooks.ts",
 
     "./app/login/StickItAuthServer.ts",
     "./app/login/model/ModelManager.ts",
@@ -31,6 +32,7 @@
     "./app/login/controller/Login.ts",
     "./app/login/auth/BasicAuth.ts",
     "./app/login/auth/LoginAuth.ts",
+    "./app/login/test/test.ts",
 
 
 
