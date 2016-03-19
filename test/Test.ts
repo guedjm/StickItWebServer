@@ -19,7 +19,14 @@ describe("Testing StickItWeb server", function(): void {
 
   describe("App URL bindings", function(): void {
 
-    it(`Auth server should reply to ${config.get("authServer.url")}:${config.get("server.port")}/ping route`);
+    it(`Auth server should reply to ${config.get("authServer.url")}:${config.get("server.port")}/ping route`,
+      function (done: Function): void {
+
+        authServer.get("/ping")
+        .expect(200)
+        .expect("Pong auth")
+        .end(done);
+    });
   });
 
   requiredir("../app/login/test");

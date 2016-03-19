@@ -1,8 +1,8 @@
 "use strict";
 
-import express from "express";
+import * as express from "express";
 
-export function ping(req: express.Request, req: express.Response, next: NextFunction): void {
+export function ping(req: express.Request, res: express.Response, next: express.NextFunction): void {
 
   res.status(200).send("Pong auth");
 }

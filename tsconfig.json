@@ -30,6 +30,7 @@
     "./app/login/controller/User.ts",
     "./app/login/controller/OAuth2.ts",
     "./app/login/controller/Login.ts",
+    "./app/login/controller/Ping.ts",
     "./app/login/auth/BasicAuth.ts",
     "./app/login/auth/LoginAuth.ts",
 
