@@ -38,6 +38,7 @@
     "gulp-shell": "^0.5.2",
     "gulp-tslint": "^4.3.3",
     "gulp-typescript": "^2.12.1",
+    "mocha": "^2.4.5",
     "tslint": "^3.6.0",
     "typescript-formatter": "^2.1.0"
   }
