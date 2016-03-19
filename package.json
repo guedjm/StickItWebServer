@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Web servers of Stick It",
   "scripts": {
-    "start": "gulp build && node ./build/bin/start.js"
+    "start": "gulp build && node ./build/bin/start.js",
+    "test": "gulp build && mocha ./build/test"
   },
   "repository": {
     "type": "git",
