@@ -76,14 +76,15 @@ export default class StickItServer {
     this.exp.use(vHost(config.get<string>("authServer.url"), this.authApp.routes));
 
     this.exp.use(function(err: any, req: express.Request, res: express.Response, next: express.NextFunction): void {
-      if (!(err instanceof StickItError))
+      if (!(err instanceof StickItError)) {
         console.error(err.stack);
-      err = StickItError.internalServerError();
+        err = StickItError.internalServerError();
+      }
 
       const sErr: StickItError = err;
-      res.status(sErr.httpStatus).send({
-        errorCode: sErr.errorCode,
-        errorSubCode: sErr.errorSubCode,
+      res.status(sErr.httpStatus).json({
+        error_code: sErr.errorCode,
+        error_subCode: sErr.errorSubCode,
         message: sErr.message
       });
     });
