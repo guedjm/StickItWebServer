@@ -13,7 +13,6 @@ passport.use("login", new localStrategy({
   passwordFiled: "password"
 },
   function(email: string, password: string, done: (err: any, user?: IUserDocument | boolean) => void): void {
-    console.log("bjr");
     const userModel: IUserDocumentModel = ModelManager.getUserModel();
     userModel.findUserByEmail(email, function(err: any, user: IUserDocument): void {
       if (err) {

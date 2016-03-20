@@ -20,11 +20,18 @@ export function validateLoginForm(req: express.Request, res: express.Response, n
     if (err) {
       next(err);
     }
-    else if (user) {
-      res.redirect("/v1/oauth2/authorize?" + queryStr.stringify(req.query));
+    else if (!user) {
+      res.redirect("/v1/oauth2/login?" + queryStr.stringify(req.query));
     }
     else {
-      res.redirect("/v1/oauth2/login?" + queryStr.stringify(req.query));
+      req.logIn(user, function(err: any): void {
+        if (err) {
+          next(err);
+        }
+        else {
+          res.redirect("/v1/oauth2/authorize?" + queryStr.stringify(req.query));
+        }
+      });
     }
   });
 }
@@ -43,7 +50,7 @@ export function isLogged(req: express.Request): boolean {
 }
 
 export function userLogged(req: express.Request, res: express.Response, next: express.NextFunction): any {
-  if (req.user === undefined) {
+  if (!req.user) {
     res.redirect("/v1/oauth2/login?" + queryStr.stringify(req.query));
   }
   else {

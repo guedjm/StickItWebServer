@@ -309,7 +309,7 @@ export const authorizationEndPoint: RequestHandler[] = [
             done(err);
           }
           else {
-            done(undefined, (decision !== undefined) ? decision.allow : false, { scope: scope });
+            done(undefined, (decision) ? decision.allow : false, { scope: scope });
           }
         });
       }
