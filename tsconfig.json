@@ -35,6 +35,7 @@
     "./app/login/auth/LoginAuth.ts",
     "./app/login/test/Test.ts",
     "./app/login/test/route/Login.ts",
+    "./app/login/test/route/Authorize.ts",
 
 
 
