@@ -19,6 +19,7 @@ export interface IUserDocumentModel extends mongoose.Model<IUserDocument> {
   createUser(email: string, password: string, cb: (err: any, user: IUserDocument) => void): void;
   findUserByEmail(email: string, cb: (err: any, user: IUserDocument) => void): void;
   findUserByPublicId(publicId: string, cb: (err: any, user: IUserDocument) => void): void;
+  deleteByEmail(email: string, cb: (err: any) => void): void;
 }
 
 const userSchema: any = new mongoose.Schema({
@@ -48,6 +49,11 @@ userSchema.static("findUserByEmail", function(email: string, cb: (err: any, user
 userSchema.static("findUserByPublicId", function(publicId: string, cb: (err: any, user: IUserDocument) => void): void {
   userDocumentModel.findOne({ publicId: publicId }, cb);
 });
+
+userSchema.static("deleteByEmail", function(email: string, cb: (err: any) => void): void {
+  userDocumentModel.findOneAndRemove({ email: email }, cb);
+});
+
 
 userSchema.method("verifyPassword", function(password: string, cb: (err: any, result: boolean) => void): void {
   bcrypt.compare(password, this.password, cb);

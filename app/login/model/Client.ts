@@ -19,6 +19,7 @@ export interface IClientDocumentModel extends mongoose.Model<IClientDocument> {
   createClient(name: string, type: number, cb: (err: any, client: IClientDocument) => void): void;
   findByClientId(id: string, cb: (err: any, client: IClientDocument) => void): void;
   findByClientIdAndSecret(id: string, secret: string, cb: (err: any, client: IClientDocument) => void): void;
+  deleteClientById(clientId: string, cb: (err: any) => void): void;
 }
 
 const clientSchema: any = new mongoose.Schema({
@@ -50,6 +51,11 @@ clientSchema.static("findByClientId", function(clientId: string, cb: (err: any, 
 clientSchema.static("findByClientIdAndSecret", function(clientId: string, secret: string,
   cb: (err: any, client: IClientDocument) => void): void {
   clientDocumentModel.findOne({ id: clientId, secret: secret }, cb);
+});
+
+clientSchema.static("deleteClientById", function(clientId: string,
+  cb: (err: any) => void): void {
+  clientDocumentModel.findOneAndRemove({ id: clientId }, cb);
 });
 
 export const clientDocumentModel: IClientDocumentModel = <IClientDocumentModel>mongoose.model("client", clientSchema);

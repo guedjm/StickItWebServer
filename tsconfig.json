@@ -33,6 +33,8 @@
     "./app/login/controller/Ping.ts",
     "./app/login/auth/BasicAuth.ts",
     "./app/login/auth/LoginAuth.ts",
+    "./app/login/test/Test.ts",
+    "./app/login/test/route/Login.ts",
 
 
 

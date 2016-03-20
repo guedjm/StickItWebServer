@@ -14,3 +14,15 @@ authServer:
   scopes:
     - none
     - all
+
+test:
+  user:
+    email: test@gmail.com
+    password: azerty
+
+  client:
+    name: Test
+    id: aTUeNZzJYSatQiA8baJk71xBA
+    secret: bYdNWurwh5Yu5TH8HhZHifubfSX7BqDO0IWUdeef
+    redirectUri:
+      - http://google.fr
