@@ -3,15 +3,30 @@
 import * as express from "express";
 import * as queryStr from "querystring";
 
-import { isLogged } from "../controller/OAuth2";
+import validateLogin from "../auth/LoginAuth";
+import { IUserDocument } from "../model/User";
 
 export function loginForm(req: express.Request, res: express.Response): void {
   if (isLogged(req)) {
-    res.redirect("/authorize?" + queryStr.stringify(req.query));
+    res.redirect("/v1/oauth2/authorize?" + queryStr.stringify(req.query));
   }
   else {
     res.render("login.jade");
   }
+}
+
+export function validateLoginForm(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  validateLogin(req, res, next, function(err: any, user: IUserDocument, info: any): void {
+    if (err) {
+      next(err);
+    }
+    else if (user) {
+      res.redirect("/v1/oauth2/authorize?" + queryStr.stringify(req.query));
+    }
+    else {
+      res.redirect("/v1/oauth2/login?" + queryStr.stringify(req.query));
+    }
+  });
 }
 
 export function authorizeForm(req: any, res: any): void {
@@ -23,6 +38,15 @@ export function authorizeForm(req: any, res: any): void {
   });
 }
 
-export function onUserLogin(req: express.Request, res: express.Response): void {
-  res.redirect("/authorize?" + queryStr.stringify(req.query));
+export function isLogged(req: express.Request): boolean {
+  return req.session["publicId"] !== undefined;
+}
+
+export function userLogged(req: express.Request, res: express.Response, next: express.NextFunction): any {
+  if (req.user === undefined) {
+    res.redirect("/v1/oauth2/login?" + queryStr.stringify(req.query));
+  }
+  else {
+    next();
+  }
 }

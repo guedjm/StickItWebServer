@@ -1,7 +1,7 @@
 "use strict";
 
+import * as express from "express";
 import * as passport from "passport";
-import { RequestHandler } from "express";
 
 import ModelManager from "../model/ModelManager";
 import { IUserDocument, IUserDocumentModel } from "../model/User";
@@ -13,13 +13,13 @@ passport.use("login", new localStrategy({
   passwordFiled: "password"
 },
   function(email: string, password: string, done: (err: any, user?: IUserDocument | boolean) => void): void {
-
+    console.log("bjr");
     const userModel: IUserDocumentModel = ModelManager.getUserModel();
     userModel.findUserByEmail(email, function(err: any, user: IUserDocument): void {
       if (err) {
         done(err);
       }
-      else if (user === undefined) {
+      else if (!user) {
         done(undefined, false);
       }
       else {
@@ -59,5 +59,8 @@ passport.deserializeUser(function(userPublicId: string, done: (err: any, user?: 
   });
 });
 
-const validateLogin: RequestHandler = passport.authenticate("login", {});
+function validateLogin(req: express.Request, res: express.Response, next: express.NextFunction,
+  cb: (err: any, user: IUserDocument, info: any) => void): void {
+  passport.authenticate("login", cb)(req, res, next);
+}
 export default validateLogin;

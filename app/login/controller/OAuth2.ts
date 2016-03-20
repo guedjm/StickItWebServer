@@ -4,8 +4,7 @@ const oauth2orize: any = require("oauth2orize");
 const server: any = oauth2orize.createServer();
 
 import * as config from "config";
-import * as queryStr from "querystring";
-import {Request, Response, NextFunction, RequestHandler} from "express";
+import {RequestHandler} from "express";
 
 
 import ModelManager from "../model/ModelManager";
@@ -320,16 +319,3 @@ export const authorizationEndPoint: RequestHandler[] = [
 export const sserver: any = server;
 export const decisionEndPoint: RequestHandler[] = [server.decision({}, saveUserDecision), server.errorHandler()];
 export const tokenEndPoint: RequestHandler[] = [server.token(), server.errorHandler()];
-
-export function isLogged(req: Request): boolean {
-  return req.session["publicId"] !== undefined;
-}
-
-export function userLogged(req: Request, res: Response, next: NextFunction): any {
-  if (req.user === undefined) {
-    res.redirect("/login?" + queryStr.stringify(req.query));
-  }
-  else {
-    next();
-  }
-}

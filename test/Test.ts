@@ -2,8 +2,6 @@
 
 import * as config from "config";
 import * as supertest from "supertest";
-// noinspection TsLint
-import { expect } from "chai";
 import StickItServer from "../bin/StickItServer";
 import modelManager from "../app/login/model/ModelManager";
 import { IUserDocumentModel, IUserDocument } from "../app/login/model/User";

@@ -16,7 +16,7 @@ passport.use("client-basic", new basicStrategy((key: string, secret: string, don
     if (err) {
       done(err);
     }
-    else if (client === undefined) {
+    else if (!client) {
       done(undefined, false);
     }
     else {
@@ -32,7 +32,7 @@ passport.use("client-password", new clientPasswordStrategy((clientId: string, cl
     if (err) {
       done(err);
     }
-    else if (client === undefined) {
+    else if (!client) {
       done(undefined, false);
     }
     else {

@@ -1,11 +1,10 @@
-import {IUserDocumentModel} from "../model/User";
 "use strict";
 
 import * as express from "express";
 
 import ModelManager from "../model/ModelManager";
 import StickItError from "../../../misc/Error";
-import { IUserDocument } from "../model/User";
+import { IUserDocumentModel, IUserDocument } from "../model/User";
 
 export function createUser(req: express.Request, res: express.Response, next: express.NextFunction): any {
 
