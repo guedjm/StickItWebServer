@@ -29,8 +29,6 @@ server.exchange(oauth2orize.exchange.password(
   function(client: IClientDocument, username: string, password: string, scope: [string], done: Function): void {
 
     checkScope(scope, function(err: any, scope: [string]): void {
-      console.log(scope);
-      console.log(err);
       if (err) {
         done(err);
       }
@@ -41,7 +39,7 @@ server.exchange(oauth2orize.exchange.password(
             if (err) {
               done(err);
             }
-            else if (user === undefined) {
+            else if (!user) {
               done(undefined, false);
             }
             else {

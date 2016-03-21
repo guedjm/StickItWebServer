@@ -36,6 +36,7 @@
     "./app/login/test/Test.ts",
     "./app/login/test/route/Login.ts",
     "./app/login/test/route/Authorize.ts",
+    "./app/login/test/route/Token.ts",
 
 
 

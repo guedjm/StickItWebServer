@@ -47,7 +47,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
     loggedAggent.get(route)
       .query(query)
       .expect(200)
-      .end(function (err: any, res: any): void {
+      .end(function(err: any, res: any): void {
         let $: any = cheerio.load(res.text);
         transacId = $("input[name=transaction_id]").attr("value");
         done();
@@ -68,7 +68,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
       .redirects(0)
       .type("form")
       .send({ cancel: "" })
-      .send({ transaction_id: transacId})
+      .send({ transaction_id: transacId })
       .expect(302)
       .expect("Location", `${(config.get<[string]>("test.client.redirectUri"))[0]}/?error=access_denied`)
       .end(done);
@@ -78,7 +78,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
     loggedAggent.get(route)
       .query(query)
       .expect(200)
-      .end(function (err: any, res: any): void {
+      .end(function(err: any, res: any): void {
         let $: any = cheerio.load(res.text);
         transacId = $("input[name=transaction_id]").attr("value");
 
@@ -87,10 +87,10 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
           .redirects(0)
           .type("form")
           .send({ allow: "" })
-          .send({ transaction_id: transacId})
+          .send({ transaction_id: transacId })
           .expect(302)
           .expect("Location",
-            new RegExp(`${config.get<[string]>("test.client.redirectUri")[0].replace(/[.]/g, "[.]")}\/[?]code=[A-Za-z0-9]*`))
+          new RegExp(`${config.get<[string]>("test.client.redirectUri")[0].replace(/[.]/g, "[.]")}\/[?]code=[A-Za-z0-9]*`))
           .end(done);
       });
   });
@@ -102,7 +102,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
       .redirects(0)
       .expect(302)
       .expect("Location",
-        new RegExp(`${config.get<[string]>("test.client.redirectUri")[0].replace(/[.]/g, "[.]")}\/[?]code=[A-Za-z0-9]*`))
+      new RegExp(`${config.get<[string]>("test.client.redirectUri")[0].replace(/[.]/g, "[.]")}\/[?]code=[A-Za-z0-9]*`))
       .end(done);
   });
 });
