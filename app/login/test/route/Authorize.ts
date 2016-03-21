@@ -1,6 +1,7 @@
 "use strict";
 
 import * as config from "config";
+import * as cheerio from "cheerio";
 import * as supertest from "supertest";
 import * as querystring from "querystring";
 
@@ -16,6 +17,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
     redirect_uri: "http://google.fr"
   };
   const fullRoute: string = route + "?" + querystring.stringify(query);
+  let transacId: string;
 
   before(function(done: Function): void {
 
@@ -45,16 +47,18 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
     loggedAggent.get(route)
       .query(query)
       .expect(200)
-      .end(done);
+      .end(function (err: any, res: any): void {
+        let $: any = cheerio.load(res.text);
+        transacId = $("input[name=transaction_id]").attr("value");
+        done();
+      });
   });
 
 
-  it("Should redirect to same form if empty body", function(done: Function): void {
+  it("Should replay Bad Request if empty body", function(done: Function): void {
     loggedAggent.post(route)
       .query(query)
-      .redirects(0)
-      .expect(302)
-      .expect("Location", fullRoute)
+      .expect(400)
       .end(done);
   });
 
@@ -63,29 +67,42 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
       .query(query)
       .redirects(0)
       .type("form")
-      .send({ denie: "" })
+      .send({ cancel: "" })
+      .send({ transaction_id: transacId})
       .expect(302)
-      .expect("Location", new RegExp(`/${(config.get<[string]>("test.client.redirectUri"))[0]}/g`))
+      .expect("Location", `${(config.get<[string]>("test.client.redirectUri"))[0]}/?error=access_denied`)
       .end(done);
   });
 
   it("Should redirect user to redirectUri with code if access granted", function(done: Function): void {
-    loggedAggent.post(route)
+    loggedAggent.get(route)
       .query(query)
-      .redirects(0)
-      .type("form")
-      .send({ allow: "" })
-      .expect(302)
-      .expect("Location", new RegExp(`/${(config.get<[string]>("test.client.redirectUri"))[0]}/g`))
-      .end(done);
+      .expect(200)
+      .end(function (err: any, res: any): void {
+        let $: any = cheerio.load(res.text);
+        transacId = $("input[name=transaction_id]").attr("value");
+
+        loggedAggent.post(route)
+          .query(query)
+          .redirects(0)
+          .type("form")
+          .send({ allow: "" })
+          .send({ transaction_id: transacId})
+          .expect(302)
+          .expect("Location",
+            new RegExp(`${config.get<[string]>("test.client.redirectUri")[0].replace(/[.]/g, "[.]")}\/[?]code=[A-Za-z0-9]*`))
+          .end(done);
+      });
   });
+
 
   it("Should redirect user to redirectUri with code if user decision already exists", function(done: Function): void {
     loggedAggent.get(route)
       .query(query)
       .redirects(0)
       .expect(302)
-      .expect("Location", new RegExp(`/${(config.get<[string]>("test.client.redirectUri"))[0]}/g`))
+      .expect("Location",
+        new RegExp(`${config.get<[string]>("test.client.redirectUri")[0].replace(/[.]/g, "[.]")}\/[?]code=[A-Za-z0-9]*`))
       .end(done);
   });
 });

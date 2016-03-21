@@ -12,7 +12,6 @@ const requiredir: any = require("require-dir");
 
 
 before(function(done: Function): void {
-
   console.log("Preparing database ...");
   const server: StickItServer = new StickItServer();
   server.disableLog();
@@ -30,7 +29,7 @@ before(function(done: Function): void {
         secret: config.get<string>("test.client.secret"),
         type: 2,
         name: config.get<string>("test.client.name"),
-        redirectUri: config.get<[string]>("test.client.redirectUri"),
+        redirectURI: config.get<[string]>("test.client.redirectUri"),
         creationDate: new Date(),
         activated: true
       }, function(err: any, client: IClientDocument): void {

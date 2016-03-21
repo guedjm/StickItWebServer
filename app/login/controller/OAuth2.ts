@@ -101,7 +101,7 @@ server.grant(oauth2orize.grant.code(function(client: IClientDocument,
     else {
       const codeModel: IAuthCodeDocumentModel = ModelManager.getAuthCodeModel();
       codeModel.createCode(user._id, client._id, redirectUri, scope, (err: any, code: IAuthCodeDocument): void => {
-        cb(err, code === undefined ? false : code.code);
+        cb(err, !code ? false : code.code);
       });
     }
   });
@@ -287,7 +287,7 @@ export const authorizationEndPoint: RequestHandler[] = [
           if (err) {
             done(err);
           }
-          else if (client === undefined || client.redirectURI.indexOf(redirectUri) === -1) {
+          else if (!client || client.redirectURI.indexOf(redirectUri) === -1) {
             done(undefined, false, false);
           }
           else {
