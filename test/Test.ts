@@ -7,13 +7,13 @@ import modelManager from "../app/login/model/ModelManager";
 import { IUserDocumentModel, IUserDocument } from "../app/login/model/User";
 import { IClientDocumentModel, IClientDocument } from "../app/login/model/Client";
 
+const server: StickItServer = new StickItServer();
 const authServer: any = supertest(`http://${config.get("authServer.url")}:${config.get("server.port")}`);
 const requiredir: any = require("require-dir");
 
 
 before(function(done: Function): void {
   console.log("Preparing database ...");
-  const server: StickItServer = new StickItServer();
   server.disableLog();
   server.initialize();
 
@@ -82,4 +82,8 @@ describe("Testing StickItWeb server", function(): void {
       });
   });
   requiredir("../app/login/test");
+});
+
+after(function (): void {
+  server.stop();
 });

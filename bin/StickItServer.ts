@@ -32,6 +32,10 @@ export default class StickItServer {
     winston.info(`Server listening on port ${config.get("server.port")}`);
   }
 
+  public stop(): void {
+    this.server.close();
+  }
+
   public disableLog(): void {
     winston.level = "error";
   }
