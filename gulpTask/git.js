@@ -21,3 +21,12 @@ gulp.task("commit", function () {
       }
     }));
 });
+
+gulp.task("push", function () {
+  gulp.src("./")
+    git.push("origin", "master", function (err) {
+      if (err) {
+        throw err;
+      }
+    });
+});
