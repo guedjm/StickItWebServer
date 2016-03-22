@@ -39,6 +39,8 @@
     "cheerio": "^0.20.0",
     "gulp": "^3.9.1",
     "gulp-bump": "^2.0.1",
+    "gulp-git": "^1.7.0",
+    "gulp-prompt": "^0.1.2",
     "gulp-shell": "^0.5.2",
     "gulp-tslint": "^4.3.3",
     "gulp-typescript": "^2.12.1",
