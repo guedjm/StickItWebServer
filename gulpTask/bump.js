@@ -23,6 +23,7 @@ gulp.task("bump", function (cb) {
         gulp.src("./package.json")
           .pipe(bump({ type: bumpType }))
           .pipe(gulp.dest("./"));
+        console.log("Version updated !");
         cb();
       }
     }));
