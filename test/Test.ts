@@ -32,6 +32,6 @@ describe("Testing StickItWeb server", function(): void {
   requiredir("../app/login/test");
 });
 
-after(function (): void {
+after(function(): void {
   server.stop();
 });

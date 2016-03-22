@@ -6,13 +6,7 @@ const runSequence = require("run-sequence");
 
 gulp.task("exec-test", function (cb) {
   return gulp.src("./build/test/Test.js", {read: false})
-    .pipe(mocha())
-    .once("error", function () {
-      process.exit(1);
-    })
-    .once("end", function () {
-      process.exit(0);
-    })
+    .pipe(mocha());
 });
 
 gulp.task("test", function (cb) {

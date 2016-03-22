@@ -4,7 +4,7 @@ const gulp = require('gulp');
 const git = require('gulp-git');
 const prompt = require("gulp-prompt");
 
-gulp.task("commit", function (cb) {
+gulp.task("exec-commit", function (cb) {
   gulp.src("./")
     .pipe(prompt.prompt({
       type: 'input',
@@ -23,7 +23,7 @@ gulp.task("commit", function (cb) {
     }));
 });
 
-gulp.task("push", function (cb) {
+gulp.task("exec-push", function (cb) {
   git.push("origin", "master", function (err) {
     cb(err);
     });
