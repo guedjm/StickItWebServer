@@ -7,7 +7,7 @@ const tslint = require('gulp-tslint');
 gulp.task('lint', function () {
   const project = ts.createProject('./tsconfig.json');
 
-  project.src()
+  return project.src()
     .pipe(tslint())
     .pipe(tslint.report("verbose"));
 });
