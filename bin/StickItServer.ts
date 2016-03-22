@@ -34,6 +34,7 @@ export default class StickItServer {
 
   public stop(): void {
     this.server.close();
+    mongoose.disconnect();
   }
 
   public disableLog(): void {
