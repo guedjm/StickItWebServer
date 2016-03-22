@@ -9,7 +9,7 @@ const clientDocumentModel = require("../build/app/login/model/Client").clientDoc
 
 gulp.task("db-test-clean", function (cb) {
 
-  mongoose.connection.on("open", function () {
+  mongoose.connection.once("open", function () {
     console.log("Database connection initialized");
     mongoose.connection.db.dropDatabase(function (err, result) {
 
@@ -20,7 +20,7 @@ gulp.task("db-test-clean", function (cb) {
     });
   });
 
-  mongoose.connection.on("error", function () {
+  mongoose.connection.once("error", function () {
     console.error("Unable to connect to the database");
   });
 
@@ -29,7 +29,7 @@ gulp.task("db-test-clean", function (cb) {
 
 gulp.task("db-test-init", function (cb) {
 
-  mongoose.connection.on("open", function () {
+  mongoose.connection.once("open", function () {
     console.log("Database connection initialized");
 
     userDocumentModel.createUser(config.get("test.user.email"), config.get("test.user.password"), function (err, user) {
@@ -62,9 +62,13 @@ gulp.task("db-test-init", function (cb) {
     });
   });
 
-  mongoose.connection.on("error", function () {
+  mongoose.connection.once("error", function () {
     console.error("Unable to connect to the database");
   });
 
   mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("test.dbConfig.dbName")}`);
+});
+
+gulp.task("wait", function (cb) {
+  setTimeout(cb, 1000);
 });
