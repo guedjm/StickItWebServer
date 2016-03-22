@@ -8,7 +8,7 @@ import * as querystring from "querystring";
 describe("Testing route /v1/oauth2/authorize", function(): void {
 
   const authServer: any = supertest(`http://${config.get("authServer.url")}:${config.get("server.port")}`);
-  const loggedAggent: any = supertest.agent(`http://${config.get("authServer.url")}:${config.get("server.port")}`);
+  const loggedAgent: any = supertest.agent(`http://${config.get("authServer.url")}:${config.get("server.port")}`);
   const route: string = "/v1/oauth2/authorize";
   const loginRoute: string = "/v1/oauth2/login";
   const query: any = {
@@ -21,7 +21,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
 
   before(function(done: Function): void {
 
-    loggedAggent.post(loginRoute)
+    loggedAgent.post(loginRoute)
       .query(query)
       .type("form")
       .send({ email: config.get<string>("test.user.email") })
@@ -44,7 +44,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
   });
 
   it("Should display an authorize form", function(done: Function): void {
-    loggedAggent.get(route)
+    loggedAgent.get(route)
       .query(query)
       .expect(200)
       .end(function(err: any, res: any): void {
@@ -56,14 +56,14 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
 
 
   it("Should replay Bad Request if empty body", function(done: Function): void {
-    loggedAggent.post(route)
+    loggedAgent.post(route)
       .query(query)
       .expect(400)
       .end(done);
   });
 
   it("Should redirect user back to redirectUri if access denied", function(done: Function): void {
-    loggedAggent.post(route)
+    loggedAgent.post(route)
       .query(query)
       .redirects(0)
       .type("form")
@@ -75,14 +75,14 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
   });
 
   it("Should redirect user to redirectUri with code if access granted", function(done: Function): void {
-    loggedAggent.get(route)
+    loggedAgent.get(route)
       .query(query)
       .expect(200)
       .end(function(err: any, res: any): void {
         let $: any = cheerio.load(res.text);
         transacId = $("input[name=transaction_id]").attr("value");
 
-        loggedAggent.post(route)
+        loggedAgent.post(route)
           .query(query)
           .redirects(0)
           .type("form")
@@ -97,7 +97,7 @@ describe("Testing route /v1/oauth2/authorize", function(): void {
 
 
   it("Should redirect user to redirectUri with code if user decision already exists", function(done: Function): void {
-    loggedAggent.get(route)
+    loggedAgent.get(route)
       .query(query)
       .redirects(0)
       .expect(302)

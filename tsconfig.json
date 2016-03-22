@@ -38,6 +38,7 @@
     "./app/login/test/route/Authorize.ts",
     "./app/login/test/route/Token.ts",
     "./app/login/test/flow/Password.ts",
+    "./app/login/test/flow/Code.ts",
 
 
 
