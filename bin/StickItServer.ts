@@ -19,10 +19,11 @@ export default class StickItServer {
   private server: http.Server;
   private authApp: StickItAuthServer;
 
-  public initialize(): void {
+  public initialize(test?: boolean): void {
+    test = (test === undefined) ? false : test;
     winston.info("Initializing server");
     this._initializeExpress();
-    this._initializeDatabaseConnection();
+    this._initializeDatabaseConnection(test);
     this.server = http.createServer(this.exp);
   }
 
@@ -42,7 +43,7 @@ export default class StickItServer {
   }
 
 
-  private _initializeDatabaseConnection(): void {
+  private _initializeDatabaseConnection(test: boolean): void {
     winston.info("Initializing database connection");
 
     mongoose.connection.on("open", function(): void {
@@ -53,7 +54,12 @@ export default class StickItServer {
       winston.error("Unable to connect to the database");
     });
 
-    mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("dbConfig.dbName")}`);
+    if (test) {
+      mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("test.dbConfig.dbName")}`);
+    }
+    else {
+      mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("dbConfig.dbName")}`);
+    }
   }
 
   private _initializeExpress(): void {
