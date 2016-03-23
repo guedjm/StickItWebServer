@@ -10,5 +10,14 @@ gulp.task("push", function (cb) {
     "test",
     "bump",
     "exec-commit",
-    "exec-push", cb);
+    "exec-push", function (err) {
+      if (err) {
+        cb(err);
+      }
+      else {
+        const pkg = JSON.parse(fs.readFileSync("./package.json"));
+        console.log("Version " + pkg.version + " successfuly pushed");
+        cb(err);
+      }
+    });
 });

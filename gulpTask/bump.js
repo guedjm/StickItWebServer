@@ -1,5 +1,6 @@
 "use strict";
 
+const fs = require("fs");
 const gulp = require("gulp");
 const bump = require("gulp-bump");
 const prompt = require("gulp-prompt");
@@ -48,4 +49,9 @@ gulp.task("bump-major", function () {
   return gulp.src("./package.json")
     .pipe(bump({type: 'major'}))
     .pipe(gulp.dest("./"));
+});
+
+gulp.task("version", function () {
+  const pkg = JSON.parse(fs.readFileSync("./package.json"));
+  console.log("Current version is " + pkg.version);
 });
