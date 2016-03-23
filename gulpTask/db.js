@@ -3,9 +3,6 @@
 const gulp = require("gulp");
 const config = require("config");
 const mongoose = require("mongoose");
-const userDocumentModel = require("../build/app/login/model/User").userDocumentModel;
-const clientDocumentModel = require("../build/app/login/model/Client").clientDocumentModel;
-
 
 gulp.task("db-test-clean", function (cb) {
 
@@ -28,6 +25,9 @@ gulp.task("db-test-clean", function (cb) {
 });
 
 gulp.task("db-test-init", function (cb) {
+
+  const userDocumentModel = require("../build/app/login/model/User").userDocumentModel;
+  const clientDocumentModel = require("../build/app/login/model/Client").clientDocumentModel;
 
   mongoose.connection.once("open", function () {
     console.log("Database connection initialized");

@@ -13,6 +13,8 @@ gulp.task("push", function (cb) {
   runSequence(
     "format",
     "lint",
+    "clean",
+    "build",
     "test",
     "bump",
     "exec-commit",
