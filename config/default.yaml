@@ -17,8 +17,11 @@ authServer:
 
 test:
   user:
-    email: test@gmail.com
-    password: azerty
+    - email: test@gmail.com
+      password: azerty
+
+    - email: toto@gmail.com
+      password: azerty
 
   client:
     name: Test

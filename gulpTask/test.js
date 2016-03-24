@@ -6,7 +6,7 @@ const runSequence = require("run-sequence");
 
 gulp.task("exec-test", function (cb) {
   console.log("Executing tests ...");
-  return gulp.src("./build/test/Test.js", {read: false})
+  return gulp.src("./test/Test.js", {read: false})
     .pipe(mocha());
 });
 

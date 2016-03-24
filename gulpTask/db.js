@@ -32,29 +32,33 @@ gulp.task("db-test-init", function (cb) {
   mongoose.connection.once("open", function () {
     console.log("Database connection initialized");
 
-    userDocumentModel.createUser(config.get("test.user.email"), config.get("test.user.password"), function (err, user) {
+    userDocumentModel.createUser(config.get("test.user")[0].email, config.get("test.user")[0].password, function (err, user) {
       if (err) {
         cb(err);
       }
       else {
-        console.log("Test user created");
-        clientDocumentModel.create({
-          id: config.get("test.client.id"),
-          secret: config.get("test.client.secret"),
-          type: 2,
-          name: config.get("test.client.name"),
-          redirectURI: config.get("test.client.redirectUri"),
-          creationDate: new Date(),
-          activated: true
-        }, function (err, client) {
+        console.log("Test user 1 created");
+        userDocumentModel.createUser(config.get("test.user")[1].email, config.get("test.user")[1].password, function (err, user) {
           if (err) {
             cb(err);
           }
           else {
-
-            console.log("Test client created");
-            mongoose.disconnect(function () {
-              cb();
+            clientDocumentModel.create({
+              id: config.get("test.client.id"),
+              secret: config.get("test.client.secret"),
+              type: 2,
+              name: config.get("test.client.name"),
+              redirectURI: config.get("test.client.redirectUri"),
+              creationDate: new Date(),
+              activated: true
+            }, function (err, client) {
+              if (err) {
+                cb(err);
+              }
+              else {
+                console.log("Test client created");
+                cb();
+              }
             });
           }
         });

@@ -15,7 +15,6 @@
     "./bin/start.ts",
     "./bin/StickItServer.ts",
     "./misc/Error.ts",
-    "./test/Test.ts",
 
     "./app/login/StickItAuthServer.ts",
     "./app/login/model/ModelManager.ts",
@@ -33,14 +32,6 @@
     "./app/login/controller/Ping.ts",
     "./app/login/auth/BasicAuth.ts",
     "./app/login/auth/LoginAuth.ts",
-    "./app/login/test/Test.ts",
-    "./app/login/test/route/Login.ts",
-    "./app/login/test/route/Authorize.ts",
-    "./app/login/test/route/Token.ts",
-    "./app/login/test/flow/Password.ts",
-    "./app/login/test/flow/Code.ts",
-
-
 
     "./typings/main.d.ts"
   ]
