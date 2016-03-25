@@ -1,6 +1,6 @@
 {
   "name": "stick-it-web-server",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Web servers of Stick It",
   "scripts": {
     "start": "gulp build && node ./build/bin/start.js",
