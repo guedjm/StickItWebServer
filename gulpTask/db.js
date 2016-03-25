@@ -5,7 +5,24 @@ const config = require("config");
 const mongoose = require("mongoose");
 const prompt = require("gulp-prompt");
 
-gulp.task("db-test-clean", function (cb) {
+gulp.task("db-connect", function (cb) {
+  mongoose.connection.once("error", function () {
+    console.error("Unable to connect to the database");
+  });
+
+  mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("dbConfig.dbName")}`);
+
+});
+
+gulp.task("db-test-connect", function () {
+  mongoose.connection.once("error", function () {
+    console.error("Unable to connect to the database");
+  });
+
+  mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("test.dbConfig.dbName")}`);
+});
+
+gulp.task("db-test-clean" ,function (cb) {
 
   mongoose.connection.once("open", function () {
     console.log("Database connection initialized");
@@ -18,11 +35,7 @@ gulp.task("db-test-clean", function (cb) {
     });
   });
 
-  mongoose.connection.once("error", function () {
-    console.error("Unable to connect to the database");
-  });
-
-  mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("test.dbConfig.dbName")}`);
+  gulp.start("db-test-connect");
 });
 
 gulp.task("db-test-init", function (cb) {
@@ -70,11 +83,7 @@ gulp.task("db-test-init", function (cb) {
     });
   });
 
-  mongoose.connection.once("error", function () {
-    console.error("Unable to connect to the database");
-  });
-
-  mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("test.dbConfig.dbName")}`);
+  gulp.start("db-test-connect");
 });
 
 gulp.task("db-create-user", function (cb) {
@@ -116,11 +125,7 @@ gulp.task("db-create-user", function (cb) {
       }));
   });
 
-  mongoose.connection.once("error", function () {
-    console.error("Unable to connect to the database");
-  });
-
-  mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("dbConfig.dbName")}`);
+  gulp.start("db-connect");
 
 });
 
@@ -163,11 +168,7 @@ gulp.task("db-create-client", function (cb) {
       }));
   });
 
-  mongoose.connection.once("error", function () {
-    console.error("Unable to connect to the database");
-  });
-
-  mongoose.connect(`mongodb://${config.get("dbConfig.host")}:${config.get("dbConfig.port")}/${config.get("dbConfig.dbName")}`);
+  gulp.start("db-connect");
 });
 
 gulp.task("wait", function (cb) {
