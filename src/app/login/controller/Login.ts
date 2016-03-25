@@ -4,7 +4,7 @@ import * as express from "express";
 import * as queryStr from "querystring";
 
 import validateLogin from "../auth/LoginAuth";
-import { IUserDocument } from "../model/User";
+import { IUserDocument } from "../../../lib/model/User";
 
 export function loginForm(req: express.Request, res: express.Response): void {
   if (isLogged(req)) {

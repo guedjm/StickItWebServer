@@ -27,8 +27,8 @@ gulp.task("db-test-clean", function (cb) {
 
 gulp.task("db-test-init", function (cb) {
 
-  const userDocumentModel = require("../build/src/app/login/model/User").userDocumentModel;
-  const clientDocumentModel = require("../build/src/app/login/model/Client").clientDocumentModel;
+  const userDocumentModel = require("../build/src/lib/model/User").userDocumentModel;
+  const clientDocumentModel = require("../build/src/lib/model/Client").clientDocumentModel;
 
   mongoose.connection.once("open", function () {
     console.log("Database connection initialized");
@@ -99,7 +99,7 @@ gulp.task("db-create-user", function (cb) {
 
             const password = res.password;
 
-            const userDocumentModel = require("../build/src/app/login/model/User").userDocumentModel;
+            const userDocumentModel = require("../build/src/lib/model/User").userDocumentModel;
             userDocumentModel.createUser(email, password, function (err, user) {
               if (err) {
                 cb(err);
@@ -146,7 +146,7 @@ gulp.task("db-create-client", function (cb) {
 
             const type = res.ctype;
 
-            const clientDocumentModel = require("../build/src/app/login/model/Client").clientDocumentModel;
+            const clientDocumentModel = require("../build/src/lib/model/Client").clientDocumentModel;
             clientDocumentModel.createClient(name, parseInt(type), function (err, client) {
               if (err) {
                 cb(err);

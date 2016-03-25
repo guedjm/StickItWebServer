@@ -7,7 +7,7 @@ import * as winston from "winston";
 import * as express from "express";
 import * as mongoose from "mongoose";
 import * as passport from "passport";
-import StickItError from "../misc/Error";
+import StickItError from "../lib/misc/Error";
 import * as bodyParser from "body-parser";
 import * as session from "express-session";
 import StickItAuthServer from "../app/login/StickItAuthServer";

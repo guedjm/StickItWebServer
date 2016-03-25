@@ -3,8 +3,8 @@
 import * as express from "express";
 import * as passport from "passport";
 
-import ModelManager from "../model/ModelManager";
-import { IUserDocument, IUserDocumentModel } from "../model/User";
+import ModelManager from "../../../lib/model/ModelManager";
+import { IUserDocument, IUserDocumentModel } from "../../../lib/model/User";
 
 const localStrategy: any = require("passport-local").Strategy;
 

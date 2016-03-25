@@ -12,24 +12,27 @@
     "outDir": "./build"
   },
   "files": [
-    "./src//bin/start.ts",
-    "./src/bin/StickItServer.ts",
-    "./src/misc/Error.ts",
+    "./src/lib/misc/Error.ts",
+    "./src/lib/misc/Utils.ts",
+
+    "./src/lib/model/ModelManager.ts",
+    "./src/lib/model/User.ts",
+    "./src/lib/model/Client.ts",
+    "./src/lib/model/AccessToken.ts",
+    "./src/lib/model/RefreshToken.ts",
+    "./src/lib/model/AuthCode.ts",
+    "./src/lib/model/UserDecision.ts",
 
     "./src/app/login/StickItAuthServer.ts",
-    "./src/app/login/model/ModelManager.ts",
-    "./src/app/login/model/User.ts",
-    "./src/app/login/model/Client.ts",
-    "./src/app/login/model/AccessToken.ts",
-    "./src/app/login/model/RefreshToken.ts",
-    "./src/app/login/model/AuthCode.ts",
-    "./src/app/login/model/UserDecision.ts",
-    "./src/app/login/misc/Utils.ts",
     "./src/app/login/controller/OAuth2.ts",
     "./src/app/login/controller/Login.ts",
     "./src/app/login/controller/Ping.ts",
     "./src/app/login/auth/BasicAuth.ts",
     "./src/app/login/auth/LoginAuth.ts",
+
+    "./src//bin/start.ts",
+    "./src/bin/StickItServer.ts",
+
 
     "./typings/main.d.ts"
   ]

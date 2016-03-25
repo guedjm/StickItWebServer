@@ -2,8 +2,8 @@
 
 import * as passport from "passport";
 import { RequestHandler } from "express";
-import ModelManager from "../model/ModelManager";
-import { IClientDocument, IClientDocumentModel } from "../model/Client";
+import ModelManager from "../../../lib/model/ModelManager";
+import { IClientDocument, IClientDocumentModel } from "../../../lib/model/Client";
 
 
 const basicStrategy: any = require("passport-http").BasicStrategy;

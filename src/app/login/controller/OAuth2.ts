@@ -7,13 +7,13 @@ import * as config from "config";
 import {RequestHandler} from "express";
 
 
-import ModelManager from "../model/ModelManager";
-import {IUserDocument, IUserDocumentModel} from "../model/User";
-import {IClientDocument, IClientDocumentModel} from "../model/Client";
-import {IAuthCodeDocument, IAuthCodeDocumentModel} from "../model/AuthCode";
-import {IAccessTokenDocument, IAccessTokenDocumentModel} from "../model/AccessToken";
-import {IRefreshTokenDocument, IRefreshTokenDocumentModel} from "../model/RefreshToken";
-import {IUserDecisionDocument, IUserDecisionDocumentModel} from "../model/UserDecision";
+import ModelManager from "../../../lib/model/ModelManager";
+import {IUserDocument, IUserDocumentModel} from "../../../lib/model/User";
+import {IClientDocument, IClientDocumentModel} from "../../../lib/model/Client";
+import {IAuthCodeDocument, IAuthCodeDocumentModel} from "../../../lib/model/AuthCode";
+import {IAccessTokenDocument, IAccessTokenDocumentModel} from "../../../lib/model/AccessToken";
+import {IRefreshTokenDocument, IRefreshTokenDocumentModel} from "../../../lib/model/RefreshToken";
+import {IUserDecisionDocument, IUserDecisionDocumentModel} from "../../../lib/model/UserDecision";
 
 server.serializeClient(function(client: IClientDocument, cb: (err: any, clientId: string) => void): void {
   return cb(undefined, client.id);
