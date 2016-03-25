@@ -3,7 +3,7 @@
 const config = require("config");
 const supertest = require("supertest");
 const requiredir = require("require-dir");
-const StickItServer = require("../build/bin/StickItServer").default;
+const StickItServer = require("../build/src/bin/StickItServer").default;
 const server = new StickItServer();
 const authServer = supertest(`http://${config.get("authServer.url")}:${config.get("server.port")}`);
 
@@ -28,7 +28,7 @@ describe("Testing StickItWeb server", function () {
   });
 
 
-  requiredir("../app/login/test");
+  requiredir("../src/app/login/test");
 });
 
 after(function () {

@@ -26,8 +26,8 @@ gulp.task("db-test-clean", function (cb) {
 
 gulp.task("db-test-init", function (cb) {
 
-  const userDocumentModel = require("../build/app/login/model/User").userDocumentModel;
-  const clientDocumentModel = require("../build/app/login/model/Client").clientDocumentModel;
+  const userDocumentModel = require("../build/src/app/login/model/User").userDocumentModel;
+  const clientDocumentModel = require("../build/src/app/login/model/Client").clientDocumentModel;
 
   mongoose.connection.once("open", function () {
     console.log("Database connection initialized");

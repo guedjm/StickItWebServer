@@ -67,7 +67,7 @@ export default class StickItServer {
 
     this.exp = express();
 
-    this.exp.set("views", "./app/login/view");
+    this.exp.set("views", "./src/app/login/view");
     this.exp.set("view engine", "jade");
 
     this.exp.use(express.static("./app/login/public"));
