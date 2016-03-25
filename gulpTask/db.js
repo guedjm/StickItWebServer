@@ -43,6 +43,7 @@ gulp.task("db-test-init", function (cb) {
             cb(err);
           }
           else {
+            console.log("Test user 2 created");
             clientDocumentModel.create({
               id: config.get("test.client.id"),
               secret: config.get("test.client.secret"),
@@ -57,7 +58,9 @@ gulp.task("db-test-init", function (cb) {
               }
               else {
                 console.log("Test client created");
-                cb();
+                mongoose.disconnect( function () {
+                  cb(err);
+                });
               }
             });
           }

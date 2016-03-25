@@ -15,6 +15,6 @@ gulp.task('build', function () {
 
 gulp.task("clean", function () {
   console.log("Cleaning project ...")
-  return gulp.src("./build", { read: false})
+  return gulp.src(["./build", "./coverage"], { read: false})
     .pipe(clean());
 });
