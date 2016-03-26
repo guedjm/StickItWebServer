@@ -1,10 +1,10 @@
 {
   "name": "stick-it-web-server",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Web servers of Stick It",
   "scripts": {
     "start": "gulp build && node ./build/bin/start.js",
-    "test": "gulp build && mocha ./build/test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",

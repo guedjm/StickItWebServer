@@ -1,0 +1,34 @@
+dbConfig:
+  host: localhost
+  port: 27017
+  dbName: stockit
+
+server:
+  port: 3000
+  sessionSecret: fzeoijfiozejfioejzio
+
+authServer:
+  url: login.stickit.local
+  accessTokenDuration: 60 #60 Mins
+  refreshTokenDuration: 72 #72h
+  scopes:
+    - none
+    - all
+
+test:
+  user:
+    - email: test@gmail.com
+      password: azerty
+
+    - email: toto@gmail.com
+      password: azerty
+
+  client:
+    name: Test
+    id: aTUeNZzJYSatQiA8baJk71xBA
+    secret: bYdNWurwh5Yu5TH8HhZHifubfSX7BqDO0IWUdeef
+    redirectUri:
+      - http://google.fr
+
+  dbConfig:
+    dbName: stickit-test
